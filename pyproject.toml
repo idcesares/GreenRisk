@@ -7,4 +7,9 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "datasets>=4.8.5",
+    "huggingface-hub>=1.13.0",
+    "torch>=2.11.0",
+    "transformers>=5.7.0",
+]
