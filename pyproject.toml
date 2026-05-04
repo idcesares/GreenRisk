@@ -1,0 +1,10 @@
+[project]
+name = "greenrisk"
+version = "0.1.0"
+description = "Fuzzy multi-dimensional greenwashing risk scoring pipeline"
+authors = [
+    { name = "Isaac D'Césares", email = "isaac.dcesares@ufrj.br" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
