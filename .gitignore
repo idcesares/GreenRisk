@@ -8,3 +8,13 @@ wheels/
 
 # Virtual environments
 .venv
+
+# IDE files
+.vscode/
+
+# Project specific files
+pinned_model_hashes.md
+docs/
+
+# Ignore the .env file
+.env

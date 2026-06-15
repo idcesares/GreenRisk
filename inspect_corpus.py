@@ -15,9 +15,3 @@ print("\nFirst 5 paragraphs:")
 for i in range(5):
     print(f"\n--- {i} ---")
     print(ds["train"][i]["text"])
-
-pandas_df = ds["train"].to_pandas()
-print("\nPandas DataFrame info:")
-print(pandas_df.info())
-print("\nPandas DataFrame head:")
-print(pandas_df.head())
