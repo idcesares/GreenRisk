@@ -95,6 +95,24 @@ def score_paragraph(signals):
     trace.sort(key=lambda d: d["fire"], reverse=True)
     return round(float(sim.output["risk"]), 2), trace
 
+def library_firings(signals):
+    """Read-only audit hook: each rule's firing strength as computed by
+    scikit-fuzzy's OWN engine (not our re-derivation).
+
+    score_paragraph's trace re-derives firing independently via min(memberships).
+    This returns the library's internal value for the SAME inputs, so a test can
+    assert the two agree — the Phase-3 defensibility property, now checkable
+    through the full integrated path. Does not alter scoring.
+
+    Returns {rule_id: firing in [0, 1]} for every rule (0.0 if it did not fire).
+    """
+    sim = ctrl.ControlSystemSimulation(_SYSTEM)
+    for name, value in signals.items():
+        sim.input[name] = value
+    sim.compute()
+    return {rule.label: float(rule.aggregate_firing[sim]) for rule in _SYSTEM.rules}
+
+
 def format_trace(signals, risk_score, trace):
     sig = "  ".join(f"{k}={signals[k]:.3f}" for k in ANTS)
     lines = [f"inputs: {sig}", f"RISK = {risk_score}", "fired rules:"]

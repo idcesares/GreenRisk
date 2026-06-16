@@ -58,7 +58,7 @@ def run_single(model_name: str, paragraph: str) -> dict:
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("GreenRisk W1 — Multi-Model Smoke Test")
+    print("GreenRisk Multi-Model Smoke Test")
     print("=" * 70)
     print(f"\nTest paragraph ({len(TEST_PARAGRAPH.split())} words):")
     print(f"  '{TEST_PARAGRAPH[:120]}...'\n")

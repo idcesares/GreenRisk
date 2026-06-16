@@ -9,5 +9,5 @@ The phase-by-phase working record (kickoffs, decision logs, session summaries)
 lives in `development/`, which is **gitignored** on purpose: it is the raw
 material for the paper, not the production stream.
 
-> Status: to be written once the rule base is locked (post-W4). Until then this
+> Status: to be written once the rule base is locked (after phase 6 — face validity). Until then this
 > directory is a placeholder so the production/development split is explicit.

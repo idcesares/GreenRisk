@@ -1,0 +1,123 @@
+@prefix gr: <https://greenrisk.ppgi.ufrj.br/prov/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+gr:risk_e417abcb99ba a prov:Entity,
+        "gr:RiskScore"^^xsd:string ;
+    prov:wasDerivedFrom gr:signal_e417abcb99ba_commitment,
+        gr:signal_e417abcb99ba_netzero,
+        gr:signal_e417abcb99ba_sentiment_asymmetry,
+        gr:signal_e417abcb99ba_specificity ;
+    prov:wasGeneratedBy gr:fuzzy_e417abcb99ba ;
+    gr:value "30.43"^^xsd:string .
+
+gr:seam_run_e417abcb99ba a prov:Activity,
+        "gr:Phase4SeamRun"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:dataset "climatebert/tcfd_recommendations"^^xsd:string ;
+    gr:gate "0.5"^^xsd:string ;
+    gr:n_paragraphs "12"^^xsd:string .
+
+gr:fuzzy_e417abcb99ba a prov:Activity,
+        "gr:FuzzyInference"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:used gr:signal_e417abcb99ba_commitment,
+        gr:signal_e417abcb99ba_netzero,
+        gr:signal_e417abcb99ba_sentiment_asymmetry,
+        gr:signal_e417abcb99ba_specificity ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:method "Mamdani/centroid"^^xsd:string ;
+    gr:rules "17"^^xsd:string .
+
+gr:inference_e417abcb99ba_commitment a prov:Activity,
+        "gr:ModelInference"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:used gr:paragraph_e417abcb99ba,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-commitment> ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:reads_label "yes"^^xsd:string .
+
+gr:inference_e417abcb99ba_netzero a prov:Activity,
+        "gr:ModelInference"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:used gr:paragraph_e417abcb99ba,
+        <https://huggingface.co/climatebert/netzero-reduction> ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:reads_label "net-zero"^^xsd:string .
+
+gr:inference_e417abcb99ba_sentiment_asymmetry a prov:Activity,
+        "gr:ModelInference"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:used gr:paragraph_e417abcb99ba,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-sentiment> ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:reads_label "opportunity"^^xsd:string .
+
+gr:inference_e417abcb99ba_specificity a prov:Activity,
+        "gr:ModelInference"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T18:44:28.639188+00:00"^^xsd:dateTime ;
+    prov:used gr:paragraph_e417abcb99ba,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-specificity> ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:reads_label "spec"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-commitment> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "17337c3292df16a8fe93b1505dfe4122d50a4c91"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-sentiment> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "e9f9a94ee4263f5ad5cfc97b8539a497fc88aa7d"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-specificity> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "4ada96ed4bf5c3a7a711282e41f1ab9b29f0ddea"^^xsd:string .
+
+<https://huggingface.co/climatebert/netzero-reduction> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "25cf57e30613a2156fee1fe3f917036df4a5c0d1"^^xsd:string .
+
+gr:signal_e417abcb99ba_commitment a prov:Entity,
+        "gr:Signal"^^xsd:string ;
+    prov:wasDerivedFrom gr:paragraph_e417abcb99ba ;
+    prov:wasGeneratedBy gr:inference_e417abcb99ba_commitment ;
+    gr:value "0.000967"^^xsd:string ;
+    gr:variable "commitment"^^xsd:string .
+
+gr:signal_e417abcb99ba_netzero a prov:Entity,
+        "gr:Signal"^^xsd:string ;
+    prov:wasDerivedFrom gr:paragraph_e417abcb99ba ;
+    prov:wasGeneratedBy gr:inference_e417abcb99ba_netzero ;
+    gr:value "0.000308"^^xsd:string ;
+    gr:variable "netzero"^^xsd:string .
+
+gr:signal_e417abcb99ba_sentiment_asymmetry a prov:Entity,
+        "gr:Signal"^^xsd:string ;
+    prov:wasDerivedFrom gr:paragraph_e417abcb99ba ;
+    prov:wasGeneratedBy gr:inference_e417abcb99ba_sentiment_asymmetry ;
+    gr:value "0.02222"^^xsd:string ;
+    gr:variable "sentiment_asymmetry"^^xsd:string .
+
+gr:signal_e417abcb99ba_specificity a prov:Entity,
+        "gr:Signal"^^xsd:string ;
+    prov:wasDerivedFrom gr:paragraph_e417abcb99ba ;
+    prov:wasGeneratedBy gr:inference_e417abcb99ba_specificity ;
+    gr:value "0.668074"^^xsd:string ;
+    gr:variable "specificity"^^xsd:string .
+
+gr:GreenRiskPipeline_v0.2 a prov:Agent,
+        "prov:SoftwareAgent"^^xsd:string ;
+    gr:version "0.2.0"^^xsd:string .
+
+gr:paragraph_e417abcb99ba a prov:Entity,
+        "gr:InputParagraph"^^xsd:string ;
+    gr:char_count "407"^^xsd:int ;
+    gr:text_sha256 "e417abcb99ba"^^xsd:string .
+

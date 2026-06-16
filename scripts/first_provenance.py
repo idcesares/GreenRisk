@@ -1,5 +1,5 @@
 # ===========================================================================
-# GreenRisk W1 Finalization — Part 2: First PROV-O Graph
+# GreenRisk Foundations — Part 2: First PROV-O Graph
 # ===========================================================================
 #
 # CONCEPT: WHAT IS PROV-O AND WHY DO WE CARE?
@@ -24,10 +24,10 @@
 #   The graph is exported as Turtle (.ttl), a standard RDF serialization format
 #   that your professors and any FAIR-data reviewer will recognize immediately.
 #
-# WHY NOW (IN W1)?
+# WHY EARLY?
 #   Two reasons:
-#     1. If provenance tracking is an afterthought bolted on in W5, it'll be
-#        incomplete and fragile. By emitting the first graph in W1, we prove
+#     1. If provenance tracking is an afterthought bolted on late, it'll be
+#        incomplete and fragile. By emitting the first graph early, we prove
 #        the infrastructure works before we depend on it.
 #     2. This is the dissertation hook. The PROV-O graph is the artifact that
 #        makes this work citable beyond the course — it's what the ISN
@@ -35,7 +35,7 @@
 #
 # HOW TO RUN:
 #   First: uv add prov   (if not already installed)
-#   Then:  uv run python w1_first_provenance.py
+#   Then:  uv run python scripts/first_provenance.py
 #
 # OUTPUT:
 #   - first_provenance.ttl  (the PROV-O graph in Turtle format)
@@ -91,7 +91,7 @@ def build_first_provenance(
     """
     Build a minimal PROV-O document tracing one paragraph through one model.
 
-    This is the simplest possible provenance graph. In W2+ we'll extend it
+    This is the simplest possible provenance graph. In later phases we'll extend it
     to cover all five models and the fuzzy inference layer. But the structure
     is the same — we're just adding more nodes and edges.
     """
@@ -253,7 +253,7 @@ if __name__ == "__main__":
     print(f"\nJSON file written: {json_path}")
 
     print("\n" + "=" * 70)
-    print("W1 CHECKPOINT: FIRST PROV-O GRAPH EMITTED")
+    print("FOUNDATIONS CHECKPOINT: FIRST PROV-O GRAPH EMITTED")
     print("=" * 70)
     print("""
     What you now have:
@@ -262,7 +262,7 @@ if __name__ == "__main__":
       3. The model is identified by repo name AND commit hash.
       4. The paragraph is identified by a SHA-256 content hash.
 
-    What this grows into in W2-W3:
+    What this grows into in later phases:
       - Four more model-inference branches (one per scoring dimension).
       - A fuzzy-inference node that consumes the four scores.
       - The final risk score + rule activation trace as output entities.
@@ -274,6 +274,6 @@ if __name__ == "__main__":
 
     COMMIT THIS:
       git add first_provenance.ttl first_provenance.json
-      git add w1_finalize_models.py w1_first_provenance.py
-      git commit -m "W1 complete: all models verified, first PROV-O graph emitted"
+      git add scripts/finalize_models.py scripts/first_provenance.py
+      git commit -m "Foundations complete: all models verified, first PROV-O graph emitted"
     """)

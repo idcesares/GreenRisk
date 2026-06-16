@@ -1,5 +1,5 @@
 # ===========================================================================
-# GreenRisk W1 Finalization — Part 1: Multi-Model Smoke Test
+# GreenRisk Foundations — Part 1: Multi-Model Smoke Test
 # ===========================================================================
 #
 # WHAT THIS DOES:
@@ -9,14 +9,14 @@
 #
 # WHY THIS MATTERS:
 #   The smoke_test.py you already ran only tested the climate-detector model.
-#   Before building the fuzzy layer in W2, you need to confirm three things
+#   Before building the fuzzy layer, you need to confirm three things
 #   for each of the four scoring dimensions:
 #     1. The model loads without errors using the pinned commit hash.
 #     2. You understand what the output labels are (they differ per model).
 #     3. The output makes intuitive sense on a test paragraph.
 #
 # HOW TO RUN:
-#   uv run python w1_finalize_models.py
+#   uv run python scripts/finalize_models.py
 #
 # CONCEPT — id2label:
 #   Each classification model has a small dictionary called id2label that
@@ -24,7 +24,7 @@
 #   {0: "no", 1: "yes"}. For other models the labels differ. We print
 #   these so you know what each probability refers to. This is NOT something
 #   you need to memorize — the code reads it from the model config. But you
-#   DO need to understand it to write the fuzzy layer mappings in W2.
+#   DO need to understand it to write the fuzzy layer mappings.
 # ===========================================================================
 
 import pathlib
@@ -83,7 +83,7 @@ def run_single(model_name: str, paragraph: str) -> dict:
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("GreenRisk W1 — Multi-Model Smoke Test")
+    print("GreenRisk Multi-Model Smoke Test")
     print("=" * 70)
     print(f"\nTest paragraph ({len(TEST_PARAGRAPH.split())} words):")
     print(f"  '{TEST_PARAGRAPH[:120]}...'\n")
@@ -99,9 +99,9 @@ if __name__ == "__main__":
 
     # === INTERPRETATION GUIDE ===
     # Print a summary that maps each model's output to a risk signal.
-    # This is the mapping you'll encode in the fuzzy layer in W2.
+    # This is the mapping you'll encode in the fuzzy layer.
     print("=" * 70)
-    print("INTERPRETATION FOR FUZZY LAYER (keep this for W2)")
+    print("INTERPRETATION FOR FUZZY LAYER")
     print("=" * 70)
 
     print("""
@@ -133,5 +133,5 @@ if __name__ == "__main__":
     """)
 
     print("NOTE: After you run this, record the EXACT label names each model")
-    print("returns in its id2label field. You'll need them in W2 to wire the")
+    print("returns in its id2label field. You'll need them to wire the")
     print("fuzzy layer correctly. Don't guess — read them from the output above.")
