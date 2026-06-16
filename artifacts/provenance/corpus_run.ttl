@@ -1,0 +1,70 @@
+@prefix gr: <https://greenrisk.ppgi.ufrj.br/prov/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+gr:tcfd_scored_csv a prov:Entity,
+        "gr:ScoredCorpus"^^xsd:string ;
+    prov:wasDerivedFrom gr:dataset_tcfd,
+        gr:instrument_rulebase-locked-v1 ;
+    prov:wasGeneratedBy gr:corpus_run ;
+    gr:filename "tcfd_scored.csv"^^xsd:string ;
+    gr:n_rows "1009"^^xsd:string ;
+    gr:sha256 "7c038d14762489c6d9c2b1d6758ebe75d4fc7891e3c4bfbdf2ff335b5910bd12"^^xsd:string .
+
+gr:GreenRiskPipeline_v0.2 a prov:Agent,
+        "prov:SoftwareAgent"^^xsd:string ;
+    gr:version "0.2.0"^^xsd:string .
+
+gr:corpus_run a prov:Activity,
+        "gr:CorpusRun"^^xsd:string ;
+    prov:endedAtTime "2026-06-16T20:56:36.680678+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-06-16T20:56:36.680678+00:00"^^xsd:dateTime ;
+    prov:used gr:dataset_tcfd,
+        gr:instrument_rulebase-locked-v1,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-commitment>,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-detector>,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-sentiment>,
+        <https://huggingface.co/climatebert/distilroberta-base-climate-specificity>,
+        <https://huggingface.co/climatebert/netzero-reduction> ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    gr:batch_size "32"^^xsd:string ;
+    gr:gate "0.5"^^xsd:string ;
+    gr:n_kept "1009"^^xsd:string ;
+    gr:n_total "1300"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-commitment> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "17337c3292df16a8fe93b1505dfe4122d50a4c91"^^xsd:string ;
+    gr:short_name "commitment"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-detector> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "2c3bc660d45a59e31b35f5d3e365ee4f59fdf76c"^^xsd:string ;
+    gr:short_name "detector"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-sentiment> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "e9f9a94ee4263f5ad5cfc97b8539a497fc88aa7d"^^xsd:string ;
+    gr:short_name "sentiment"^^xsd:string .
+
+<https://huggingface.co/climatebert/distilroberta-base-climate-specificity> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "4ada96ed4bf5c3a7a711282e41f1ab9b29f0ddea"^^xsd:string ;
+    gr:short_name "specificity"^^xsd:string .
+
+<https://huggingface.co/climatebert/netzero-reduction> a prov:Entity,
+        "gr:PretrainedModel"^^xsd:string ;
+    gr:commit_hash "25cf57e30613a2156fee1fe3f917036df4a5c0d1"^^xsd:string ;
+    gr:short_name "netzero"^^xsd:string .
+
+gr:dataset_tcfd a prov:Entity,
+        "gr:Corpus"^^xsd:string ;
+    gr:n_total "1300"^^xsd:string ;
+    gr:name "climatebert/tcfd_recommendations"^^xsd:string .
+
+gr:instrument_rulebase-locked-v1 a prov:Entity,
+        "gr:FuzzyInstrument"^^xsd:string ;
+    gr:defuzz "Mamdani/centroid"^^xsd:string ;
+    gr:n_rules "17"^^xsd:string ;
+    gr:tag "rulebase-locked-v1"^^xsd:string .
+
