@@ -1,8 +1,14 @@
 # Smoke test script to verify that all models can be loaded and run on a sample paragraph.
 # It also prints the label mappings and probabilities for each model
 
+import pathlib
+import sys
+
+# Repo root on the path so core modules import when run from anywhere.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+
 import torch
-from models import load  
+from models import load
 
 # A paragraph designed to trigger interesting signals across all dimensions:
 # - clearly climate-related (detector → yes)

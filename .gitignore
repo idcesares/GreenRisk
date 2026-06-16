@@ -14,7 +14,9 @@ wheels/
 
 # Project specific files
 pinned_model_hashes.md
-docs/
+# Development/process docs (phase kickoffs, decision logs) — feed the paper,
+# not the production stream. Final consolidated docs live in tracked docs/.
+development/
 
 # Ignore the .env file
 .env

@@ -4,6 +4,15 @@ Writes one PNG per variable (methodology figures). Uses the non-interactive
 Agg backend so it writes files without opening windows or blocking on show().
 """
 
+import pathlib
+import sys
+
+# Repo root on the path so core modules import when run from anywhere.
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+FIG_DIR = ROOT / "artifacts" / "figures"
+FIG_DIR.mkdir(parents=True, exist_ok=True)
+
 import matplotlib
 matplotlib.use("Agg")  # render to file; no GUI windows, no blocking
 import matplotlib.pyplot as plt
@@ -26,6 +35,6 @@ FIGURES = {
 for filename, var in FIGURES.items():
     var.view()                                  # skfuzzy draws the MFs on a new figure
     fig = plt.gcf()                             # grab the figure view() just created
-    fig.savefig(filename, dpi=150, bbox_inches="tight")
+    fig.savefig(FIG_DIR / filename, dpi=150, bbox_inches="tight")
     plt.close(fig)                              # free it; don't leak figures in the loop
-    print(f"saved {filename}")
+    print(f"saved {FIG_DIR / filename}")

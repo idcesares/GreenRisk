@@ -217,7 +217,8 @@ if __name__ == "__main__":
     )
 
     # === SERIALIZE TO TURTLE ===
-    output_dir = Path(__file__).resolve().parent
+    output_dir = Path(__file__).resolve().parents[1] / "artifacts" / "provenance"
+    output_dir.mkdir(parents=True, exist_ok=True)
     ttl_path = output_dir / "first_provenance.ttl"
     doc.serialize(str(ttl_path), format="rdf", rdf_format="ttl")
     print(f"\nTurtle file written: {ttl_path}")

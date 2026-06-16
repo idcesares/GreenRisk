@@ -1,6 +1,12 @@
 """ This is a Sanity check: load the climate detector and run it on one paragraph.
 Expected outcome: detector says 'yes' with high confidence."""
 
+import pathlib
+import sys
+
+# Repo root on the path so core modules import when run from anywhere.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+
 import torch
 from models import load
 

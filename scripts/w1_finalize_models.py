@@ -27,6 +27,12 @@
 #   DO need to understand it to write the fuzzy layer mappings in W2.
 # ===========================================================================
 
+import pathlib
+import sys
+
+# Repo root on the path so core modules import when run from anywhere.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+
 import torch
 from models import load  # your models.py from the walkthrough
 
