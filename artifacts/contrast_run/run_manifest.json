@@ -1,0 +1,17 @@
+{
+  "instrument_tag": "rulebase-locked-v1",
+  "dataset": "data/contrast_set.csv (held-out)",
+  "gate": 0.5,
+  "batch_size": 32,
+  "n": 15,
+  "n_gate_pass": 15,
+  "prereg_ratified": "2026-06-17",
+  "model_hashes": {
+    "detector": "2c3bc660d45a59e31b35f5d3e365ee4f59fdf76c",
+    "specificity": "4ada96ed4bf5c3a7a711282e41f1ab9b29f0ddea",
+    "commitment": "17337c3292df16a8fe93b1505dfe4122d50a4c91",
+    "sentiment": "e9f9a94ee4263f5ad5cfc97b8539a497fc88aa7d",
+    "netzero": "25cf57e30613a2156fee1fe3f917036df4a5c0d1"
+  },
+  "timestamp_utc": "2026-06-17T12:35:37.175929+00:00"
+}

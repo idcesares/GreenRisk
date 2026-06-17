@@ -95,9 +95,9 @@ GreenRisk/
 ## 5. Phase roadmap
 
 Numbered by project phase (calendar-week labels retired). Phases 0–4 are complete
-and frozen in `rulebase-locked-v1`; Phase 5 (full-corpus run + Bingler baseline) is
-complete and runs against that frozen instrument. Phase 6 is next — the contrast set
-unseals there.
+and frozen in `rulebase-locked-v1`; Phases 5–6 (full-corpus run + Bingler baseline;
+held-out face validity) are complete and run against that frozen instrument. Phase 7
+(consolidated write-up) is next.
 
 | # | Milestone | Status | Where |
 | --- | --- | --- | --- |
@@ -107,12 +107,12 @@ unseals there.
 | 3 | Rule base — 17-rule Mamdani spine | ✅ **DL-001** | `development/3_rule_base/` · `decisions/decision_log.md` |
 | 4 | End-to-end pipeline test + **LOCK** | ✅ **`rulebase-locked-v1`** | `development/4_pipeline_and_lock/` · `decisions/` |
 | 5 | Full-corpus run + Bingler cheap-talk baseline *(legacy "W3")* | ✅ **DL-004** | `scripts/run_full_corpus.py` · `scripts/bingler_baseline.py` · `scripts/provenance_corpus_run.py` · `artifacts/corpus_run/` · `development/5_corpus_and_baseline/` |
-| 6 | Face validity vs. the contrast set *(legacy "W4")* | ⏭ **next** — set unseals here | `development/6_face_validity/` · `data/contrast_set.csv` |
-| 7 | Consolidated write-up / paper *(legacy "W5")* | — | `docs/` |
+| 6 | Face validity vs. the contrast set *(legacy "W4")* | ✅ **DL-005** | `scripts/run_contrast_set.py` · `scripts/evaluate_face_validity.py` · `scripts/provenance_contrast_run.py` · `artifacts/contrast_run/` · `development/6_face_validity/` |
+| 7 | Consolidated write-up / paper *(legacy "W5")* | ⏭ **next** | `docs/` |
 
 **Lock discipline:** after `rulebase-locked-v1`, any instrument change is a
-*separate, logged ablation* — never a silent edit. Phase 6 must run against the
-frozen instrument; the contrast set stays sealed until then.
+*separate, logged ablation* — never a silent edit. Phases 5–6 ran against the
+frozen instrument; the contrast set stayed sealed until Phase 6 (held-out, one-shot).
 
 ## 6. Decisions index
 
@@ -127,6 +127,7 @@ Append-only. Full entries in `development/decisions/`.
 | LOCK | Freeze rules + MFs together → `rulebase-locked-v1` | 4 |
 | Anchor 1 | Vague net-zero pledge → Elevated ~60, spine+signature (expectation updated post-DL-001) — `decisions/calibration_anchors.md` | 4 |
 | DL-004 | Phase 5 validity — converges with Bingler cheap-talk (Spearman ρ=0.60, n=1009) yet adds a claim-strength axis it is blind to (within top-quartile cheap-talk, ρ(commit,risk)=0.43); the two diverge precisely on maximally-vague low-commitment text, which DL-001 demotes to Moderate | 5 |
+| DL-005 | Phase 6 held-out face validity — in-scope (vagueness) greenwashing separates from rigorous (AUC=0.87, n=5v6, p=0.026; demonstration, wide CI); boundary 4/4 (specificity-based greenwashing correctly unflagged). Limitation: `specificity` proxies substance and is foolable both ways — RD-006 over-flagged (process disclosure), GW-004/008 under-flagged (specific bad-faith). No instrument change | 6 |
 
 ## 7. Reproducibility
 
@@ -149,6 +150,11 @@ uv run python scripts/validation/hash3_characterize.py -n 500 --gate 0.5
 uv run python scripts/run_full_corpus.py --gate 0.5
 uv run python scripts/bingler_baseline.py
 uv run python scripts/provenance_corpus_run.py
+
+# Phase 6 — held-out face validity (contrast set) + provenance
+uv run python scripts/run_contrast_set.py --gate 0.5
+uv run python scripts/evaluate_face_validity.py
+uv run python scripts/provenance_contrast_run.py
 
 # smoke tests
 uv run python tests/smoke_test_all_models.py

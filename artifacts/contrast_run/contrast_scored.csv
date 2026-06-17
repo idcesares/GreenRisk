@@ -1,0 +1,16 @@
+id,group,stratum,expectation,company,climate_p,gate_pass,specificity,commitment,sentiment_asymmetry,netzero,risk,top_rule,fired_rules,sha12
+GW-001,greenwashing,in_scope,elevated,DWS Group,0.9978,True,0.0618,0.9947,0.8663,0.0005,76.07,S3,S3:0.84|O1:0.67,ad62cb79c8c2
+GW-002,greenwashing,in_scope,elevated,DWS Group,0.9983,True,0.0327,0.0058,0.3076,0.0002,35.0,S1,S1:0.92,f3760516ac23
+GW-003,greenwashing,in_scope,elevated,DWS Group,0.9976,True,0.0753,0.9257,0.1995,0.0008,89.7,S3,S3:0.81,347d22e9c5cc
+GW-004,greenwashing,out_of_scope,low,Volkswagen AG,0.9984,True,0.8388,0.998,0.5426,0.0118,11.16,S9,S9:0.60,536096478e7f
+GW-005,greenwashing,in_scope,moderate_elevated,Volkswagen AG,0.9982,True,0.0676,0.7075,0.0123,0.0002,73.17,S2,S2:0.31|S3:0.27,7112f7fa23e0
+GW-006,greenwashing,boundary,uncertain,Volkswagen AG,0.9982,True,0.7712,0.9314,0.798,0.0011,26.16,S9,S9:0.43|O3:0.43|S6:0.10,3fc87c0edd8a
+GW-007,greenwashing,in_scope,elevated,HSBC UK Bank plc,0.9981,True,0.8627,0.9967,0.9749,0.1057,10.88,S9,S9:0.66|O3:0.66,c838b13f5d70
+GW-008,greenwashing,out_of_scope,low,HSBC UK Bank plc,0.9979,True,0.9444,0.9899,0.9661,0.0071,10.17,S9,S9:0.86|O3:0.86,1489e90761c3
+GW-009,greenwashing,out_of_scope,low,HSBC UK Bank plc,0.9984,True,0.4308,0.5163,0.199,0.0009,35.0,S5,S5:0.77,562d8c9b4425
+RD-001,rigorous,reference,low,Microsoft,0.9983,True,0.9213,0.9163,0.1065,0.0005,10.36,S9,S9:0.79,3cb90cb5dc5d
+RD-002,rigorous,reference,low,Microsoft,0.9984,True,0.9848,0.9984,0.951,0.9939,10.01,S9,S9:0.96|N3:0.96|O3:0.88,3e1f3ff92045
+RD-003,rigorous,reference,low,Microsoft,0.9984,True,0.7353,0.6655,0.0233,0.0047,35.11,S8,S8:0.34|S5:0.22|S6:0.16|S9:0.16,eb31153d3fc1
+RD-004,rigorous,reference,low,Ørsted A/S,0.9985,True,0.97,0.9983,0.1017,0.0006,10.05,S9,S9:0.93,8e02fd34a0b8
+RD-005,rigorous,reference,low,Ørsted A/S,0.9986,True,0.8801,0.9979,0.0383,0.0011,10.69,S9,S9:0.70,bf85cf855d84
+RD-006,rigorous,reference,low,Ørsted A/S,0.9983,True,0.297,0.9922,0.0678,0.0004,72.7,S6,S6:0.32|S3:0.26,6e057fc68287

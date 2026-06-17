@@ -1,0 +1,147 @@
+{
+  "instrument_tag": "rulebase-locked-v1",
+  "primary": {
+    "n_in_scope": 5,
+    "n_reference": 6,
+    "auc": 0.8667,
+    "mannwhitney_u": 26.0,
+    "p_one_sided": 0.026
+  },
+  "boundary": {
+    "n": 4,
+    "n_below_flag": 4,
+    "flag_threshold": 50.0,
+    "confirmed": true
+  },
+  "findings": {
+    "false_positives": [
+      "RD-006"
+    ],
+    "false_negatives": [
+      "GW-002",
+      "GW-007"
+    ]
+  },
+  "per_case": [
+    {
+      "id": "GW-001",
+      "stratum": "in_scope",
+      "expectation": "elevated",
+      "risk": 76.07,
+      "band": "Elevated",
+      "top_rule": "S3"
+    },
+    {
+      "id": "GW-002",
+      "stratum": "in_scope",
+      "expectation": "elevated",
+      "risk": 35.0,
+      "band": "Moderate",
+      "top_rule": "S1"
+    },
+    {
+      "id": "GW-003",
+      "stratum": "in_scope",
+      "expectation": "elevated",
+      "risk": 89.7,
+      "band": "High",
+      "top_rule": "S3"
+    },
+    {
+      "id": "GW-004",
+      "stratum": "out_of_scope",
+      "expectation": "low",
+      "risk": 11.16,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "GW-005",
+      "stratum": "in_scope",
+      "expectation": "moderate_elevated",
+      "risk": 73.17,
+      "band": "Elevated",
+      "top_rule": "S2"
+    },
+    {
+      "id": "GW-006",
+      "stratum": "boundary",
+      "expectation": "uncertain",
+      "risk": 26.16,
+      "band": "Moderate",
+      "top_rule": "S9"
+    },
+    {
+      "id": "GW-007",
+      "stratum": "in_scope",
+      "expectation": "elevated",
+      "risk": 10.88,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "GW-008",
+      "stratum": "out_of_scope",
+      "expectation": "low",
+      "risk": 10.17,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "GW-009",
+      "stratum": "out_of_scope",
+      "expectation": "low",
+      "risk": 35.0,
+      "band": "Moderate",
+      "top_rule": "S5"
+    },
+    {
+      "id": "RD-001",
+      "stratum": "reference",
+      "expectation": "low",
+      "risk": 10.36,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "RD-002",
+      "stratum": "reference",
+      "expectation": "low",
+      "risk": 10.01,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "RD-003",
+      "stratum": "reference",
+      "expectation": "low",
+      "risk": 35.11,
+      "band": "Moderate",
+      "top_rule": "S8"
+    },
+    {
+      "id": "RD-004",
+      "stratum": "reference",
+      "expectation": "low",
+      "risk": 10.05,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "RD-005",
+      "stratum": "reference",
+      "expectation": "low",
+      "risk": 10.69,
+      "band": "Low",
+      "top_rule": "S9"
+    },
+    {
+      "id": "RD-006",
+      "stratum": "reference",
+      "expectation": "low",
+      "risk": 72.7,
+      "band": "Elevated",
+      "top_rule": "S6"
+    }
+  ]
+}
