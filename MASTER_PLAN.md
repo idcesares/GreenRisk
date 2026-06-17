@@ -95,7 +95,9 @@ GreenRisk/
 ## 5. Phase roadmap
 
 Numbered by project phase (calendar-week labels retired). Phases 0–4 are complete
-and frozen in `rulebase-locked-v1`.
+and frozen in `rulebase-locked-v1`; Phase 5 (full-corpus run + Bingler baseline) is
+complete and runs against that frozen instrument. Phase 6 is next — the contrast set
+unseals there.
 
 | # | Milestone | Status | Where |
 | --- | --- | --- | --- |
@@ -104,8 +106,8 @@ and frozen in `rulebase-locked-v1`.
 | 2 | Linguistic variables — MFs, breakpoints, signal distributions | ✅ | `development/2_linguistic_variables/` · `decisions/decisions_Phase2.md` |
 | 3 | Rule base — 17-rule Mamdani spine | ✅ **DL-001** | `development/3_rule_base/` · `decisions/decision_log.md` |
 | 4 | End-to-end pipeline test + **LOCK** | ✅ **`rulebase-locked-v1`** | `development/4_pipeline_and_lock/` · `decisions/` |
-| 5 | Full-corpus run + Bingler cheap-talk baseline *(legacy "W3")* | ⏭ **next** | — |
-| 6 | Face validity vs. the contrast set *(legacy "W4")* | ⛔ blocked — set sealed | `data/contrast_set.csv` |
+| 5 | Full-corpus run + Bingler cheap-talk baseline *(legacy "W3")* | ✅ **DL-004** | `scripts/run_full_corpus.py` · `scripts/bingler_baseline.py` · `scripts/provenance_corpus_run.py` · `artifacts/corpus_run/` · `development/5_corpus_and_baseline/` |
+| 6 | Face validity vs. the contrast set *(legacy "W4")* | ⏭ **next** — set unseals here | `development/6_face_validity/` · `data/contrast_set.csv` |
 | 7 | Consolidated write-up / paper *(legacy "W5")* | — | `docs/` |
 
 **Lock discipline:** after `rulebase-locked-v1`, any instrument change is a
@@ -124,6 +126,7 @@ Append-only. Full entries in `development/decisions/`.
 | DL-003 | #3 commitment false-positive — **isolated** (1.4% of gated TCFD); watch item + §7 limitation, no rule change | 4 |
 | LOCK | Freeze rules + MFs together → `rulebase-locked-v1` | 4 |
 | Anchor 1 | Vague net-zero pledge → Elevated ~60, spine+signature (expectation updated post-DL-001) — `decisions/calibration_anchors.md` | 4 |
+| DL-004 | Phase 5 validity — converges with Bingler cheap-talk (Spearman ρ=0.60, n=1009) yet adds a claim-strength axis it is blind to (within top-quartile cheap-talk, ρ(commit,risk)=0.43); the two diverge precisely on maximally-vague low-commitment text, which DL-001 demotes to Moderate | 5 |
 
 ## 7. Reproducibility
 
@@ -141,6 +144,11 @@ uv run python scripts/validation/integration_seam_test.py -n 20 --gate 0.5
 uv run python scripts/validation/mf_experiment.py -n 200 --gate 0.5
 uv run python scripts/validation/anchor_verify.py
 uv run python scripts/validation/hash3_characterize.py -n 500 --gate 0.5
+
+# Phase 5 — full-corpus run + Bingler baseline + run-level provenance
+uv run python scripts/run_full_corpus.py --gate 0.5
+uv run python scripts/bingler_baseline.py
+uv run python scripts/provenance_corpus_run.py
 
 # smoke tests
 uv run python tests/smoke_test_all_models.py

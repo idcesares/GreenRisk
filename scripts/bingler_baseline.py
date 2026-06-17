@@ -13,10 +13,12 @@ Asks two questions of the locked instrument vs. this baseline:
 Inputs:  artifacts/corpus_run/tcfd_scored.csv
 Outputs: artifacts/figures/bingler_convergence.png
          artifacts/figures/bingler_discriminant.png
+         artifacts/corpus_run/bingler_stats.json   (paper cites a file, not stdout)
          prints correlation + decile + category tables
 
 Run:  uv run python scripts/bingler_baseline.py
 """
+import json
 import pathlib
 import sys
 
@@ -111,6 +113,30 @@ def main():
 
     print(f"wrote {FIG / 'bingler_convergence.png'}")
     print(f"wrote {FIG / 'bingler_discriminant.png'}")
+
+    # --- PERSIST STATS (paper cites a file, not stdout) ----------------------
+    stats = {
+        "instrument_tag": "rulebase-locked-v1",
+        "n_paragraphs": int(n),
+        "convergent": {
+            "spearman_rho": round(float(rho), 4), "spearman_p": float(p_s),
+            "pearson_r": round(float(r), 4), "pearson_p": float(p_p),
+        },
+        "decile_cheap_talk_to_risk": decile.reset_index().to_dict(orient="records"),
+        "discriminant_top_quartile_cheap_talk": {
+            "n": int(len(hi)),
+            "cheap_talk_mean": round(float(hi["cheap_talk"].mean()), 4),
+            "cheap_talk_std": round(float(hi["cheap_talk"].std()), 4),
+            "risk_mean": round(float(hi["risk"].mean()), 2),
+            "risk_std": round(float(hi["risk"].std()), 2),
+            "risk_min": float(hi["risk"].min()), "risk_max": float(hi["risk"].max()),
+            "spearman_commitment_risk": round(float(rho_c), 4),
+        },
+        "cherry_picking_by_category": cat.reset_index().to_dict(orient="records"),
+    }
+    stats_path = ROOT / "artifacts" / "corpus_run" / "bingler_stats.json"
+    stats_path.write_text(json.dumps(stats, indent=2))
+    print(f"wrote {stats_path}")
 
 
 if __name__ == "__main__":

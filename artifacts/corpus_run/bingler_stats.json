@@ -1,0 +1,124 @@
+{
+  "instrument_tag": "rulebase-locked-v1",
+  "n_paragraphs": 1009,
+  "convergent": {
+    "spearman_rho": 0.6021,
+    "spearman_p": 1.4459566867274691e-100,
+    "pearson_r": 0.5966,
+    "pearson_p": 2.6332804238646116e-98
+  },
+  "decile_cheap_talk_to_risk": [
+    {
+      "ct_decile": 0,
+      "cheap_talk_mid": 0.02,
+      "mean_risk": 10.08,
+      "std_risk": 0.31,
+      "n": 101
+    },
+    {
+      "ct_decile": 1,
+      "cheap_talk_mid": 0.05,
+      "mean_risk": 10.8,
+      "std_risk": 4.4,
+      "n": 101
+    },
+    {
+      "ct_decile": 2,
+      "cheap_talk_mid": 0.15,
+      "mean_risk": 13.46,
+      "std_risk": 6.66,
+      "n": 101
+    },
+    {
+      "ct_decile": 3,
+      "cheap_talk_mid": 0.39,
+      "mean_risk": 47.18,
+      "std_risk": 13.97,
+      "n": 101
+    },
+    {
+      "ct_decile": 4,
+      "cheap_talk_mid": 0.66,
+      "mean_risk": 48.14,
+      "std_risk": 16.19,
+      "n": 101
+    },
+    {
+      "ct_decile": 5,
+      "cheap_talk_mid": 0.82,
+      "mean_risk": 51.12,
+      "std_risk": 22.3,
+      "n": 100
+    },
+    {
+      "ct_decile": 6,
+      "cheap_talk_mid": 0.9,
+      "mean_risk": 49.43,
+      "std_risk": 22.73,
+      "n": 101
+    },
+    {
+      "ct_decile": 7,
+      "cheap_talk_mid": 0.94,
+      "mean_risk": 38.27,
+      "std_risk": 12.11,
+      "n": 101
+    },
+    {
+      "ct_decile": 8,
+      "cheap_talk_mid": 0.96,
+      "mean_risk": 40.37,
+      "std_risk": 15.81,
+      "n": 101
+    },
+    {
+      "ct_decile": 9,
+      "cheap_talk_mid": 0.97,
+      "mean_risk": 36.78,
+      "std_risk": 9.47,
+      "n": 101
+    }
+  ],
+  "discriminant_top_quartile_cheap_talk": {
+    "n": 253,
+    "cheap_talk_mean": 0.9608,
+    "cheap_talk_std": 0.0102,
+    "risk_mean": 38.62,
+    "risk_std": 13.11,
+    "risk_min": 35.0,
+    "risk_max": 89.96,
+    "spearman_commitment_risk": 0.4331
+  },
+  "cherry_picking_by_category": [
+    {
+      "tcfd_category": "metrics",
+      "n": 255,
+      "mean_cheap_talk": 0.204,
+      "mean_risk": 21.015
+    },
+    {
+      "tcfd_category": "strategy",
+      "n": 518,
+      "mean_cheap_talk": 0.651,
+      "mean_risk": 37.383
+    },
+    {
+      "tcfd_category": "risk",
+      "n": 162,
+      "mean_cheap_talk": 0.865,
+      "mean_risk": 41.966
+    },
+    {
+      "tcfd_category": "governance",
+      "n": 61,
+      "mean_cheap_talk": 0.85,
+      "mean_risk": 43.862
+    },
+    {
+      "tcfd_category": "none",
+      "n": 13,
+      "mean_cheap_talk": 0.664,
+      "mean_risk": 50.668
+    }
+  ]
+}
