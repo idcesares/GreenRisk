@@ -29,7 +29,7 @@ raw paragraph
    ▼  signal mapping        4 probabilities → 4 fuzzy inputs   (models.SIGNAL_MAP)
    ▼  fuzzy inference       Mamdani, 17 rules, centroid        (rule_base.score_paragraph)
    ▼  output                risk ∈ [0,100] + fired-rule trace
-   ▼  provenance            PROV-O graph (.ttl)                (scripts/first_provenance pattern)
+   ▼  provenance            PROV-O graph (.ttl)                (scripts/provenance_*)
 ```
 
 Core modules (repo root, authoritative source of truth for the instrument):
@@ -71,8 +71,7 @@ GreenRisk/
 ├── models.py  linguistic_variables.py  rule_base.py  main.py   core modules
 ├── scripts/                    tracked — pipeline & artifact producers
 │   ├── pin_models.py           pin ClimateBERT revisions (reproducibility)
-│   ├── finalize_models.py   model verification / finalization
-│   ├── first_provenance.py  first PROV-O graph → artifacts/provenance/
+│   ├── first_provenance.py     foundation PROV-O example → artifacts/provenance/
 │   ├── plot_linguistic_variables.py   → artifacts/figures/ (MF plots)
 │   ├── sanity_check_distributions.py  → artifacts/figures/ (signal distributions)
 │   └── validation/             locked-evidence harnesses (re-run the W2 close-out)
@@ -81,12 +80,13 @@ GreenRisk/
 │       ├── anchor_verify.py           Calibration Anchor 1
 │       └── hash3_characterize.py      #3 commitment false-positive (DL-003)
 ├── tests/                      smoke tests (models, detector, provenance)
-├── data/                       contrast_set.csv  ← SEALED until phase 6 (face validity)
+├── data/                       contrast_set.csv  ← held-out Phase 6 face-validity set
 ├── artifacts/                  figures/ (plots) · provenance/ (.ttl/.json/.png)
-├── docs/                       consolidated public docs (written post-instrument-validation)
+├── docs/                       consolidated public docs
 └── development/                process record — GITIGNORED (raw material for the paper)
     ├── 0_foundations/  1_mamdani_primer/  2_linguistic_variables/
-    ├── 3_rule_base/    4_pipeline_and_lock/
+    ├── 3_rule_base/    4_pipeline_and_lock/  5_corpus_and_baseline/
+    ├── 6_face_validity/
     ├── decisions/      decision_log.md · decisions_Phase2.md · calibration_anchors.md
     ├── scripts/        eval_phase3.py · inspect_corpus.py · iterate_tcfd.py
     └── archive/        GreenRisk_MasterPlan.docx (retired)
@@ -134,7 +134,7 @@ Append-only. Full entries in `development/decisions/`.
 ```powershell
 # pin + verify models (writes pinned_model_hashes.md, gitignored)
 uv run python scripts/pin_models.py
-uv run python scripts/finalize_models.py
+uv run python tests/smoke_test_all_models.py
 
 # regenerate committed artifacts
 uv run python scripts/plot_linguistic_variables.py
@@ -158,10 +158,12 @@ uv run python scripts/provenance_contrast_run.py
 
 # smoke tests
 uv run python tests/smoke_test_all_models.py
+uv run python tests/smoke_test_detector_model.py
+uv run python tests/smoke_test_provenance.py
 ```
 
 All iteration runs use **TCFD only** (`climatebert/tcfd_recommendations`). The
-contrast set is sealed until phase 6.
+contrast set was reserved for the one-shot Phase 6 face-validity check.
 
 ## 8. Conventions
 

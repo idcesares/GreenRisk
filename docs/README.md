@@ -1,13 +1,19 @@
 # GreenRisk — Documentation
 
-Consolidated, project-level documentation (tracked, committed). This is the
-public-facing description of the **finished** system — architecture, the fuzzy
-pipeline, the rule base, provenance, and how to reproduce results — written as a
-coherent whole rather than a phase-by-phase diary.
+This directory is reserved for consolidated, public-facing documentation:
+architecture, the fuzzy pipeline, the locked rule base, provenance, and
+reproducibility notes written as a coherent whole rather than a phase-by-phase
+diary.
 
 The phase-by-phase working record (kickoffs, decision logs, session summaries)
 lives in `development/`, which is **gitignored** on purpose: it is the raw
 material for the paper, not the production stream.
 
-> Status: to be written once the rule base is locked (after phase 6 — face validity). Until then this
-> directory is a placeholder so the production/development split is explicit.
+Current public entry points:
+
+- [`../README.md`](../README.md) — short project overview.
+- [`../MASTER_PLAN.md`](../MASTER_PLAN.md) — canonical architecture, phase map,
+  evidence index, and reproduction commands.
+
+When this directory is expanded, convert the development record into polished
+documentation. Do not copy raw working notes here verbatim.
