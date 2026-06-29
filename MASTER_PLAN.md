@@ -6,7 +6,7 @@
 > docs under `development/`; this file links to them. Supersedes the retired
 > `development/archive/GreenRisk_MasterPlan.docx`.
 >
-> Instrument status: **frozen at tag `rulebase-locked-v1`** (W2 close-out, 2026-06-16).
+> Instrument status: **frozen at tag `rulebase-locked-v1`** (Phase 4 lock close-out, 2026-06-16).
 
 ---
 
@@ -74,7 +74,7 @@ GreenRisk/
 │   ├── first_provenance.py     foundation PROV-O example → artifacts/provenance/
 │   ├── plot_linguistic_variables.py   → artifacts/figures/ (MF plots)
 │   ├── sanity_check_distributions.py  → artifacts/figures/ (signal distributions)
-│   └── validation/             locked-evidence harnesses (re-run the W2 close-out)
+│   └── validation/             locked-evidence harnesses (re-run the Phase 4 lock)
 │       ├── integration_seam_test.py   end-to-end seam test + PROV-O
 │       ├── mf_experiment.py           triangular vs. trapezoidal (DL-002)
 │       ├── anchor_verify.py           Calibration Anchor 1
@@ -94,10 +94,9 @@ GreenRisk/
 
 ## 5. Phase roadmap
 
-Numbered by project phase (calendar-week labels retired). Phases 0–4 are complete
-and frozen in `rulebase-locked-v1`; Phases 5–6 (full-corpus run + Bingler baseline;
-held-out face validity) are complete and run against that frozen instrument. Phase 7
-(consolidated write-up) is next.
+The project is organized only by phase. Phases 0–4 define and lock the scoring
+instrument at `rulebase-locked-v1`; Phases 5–6 run validation and face-validity
+evidence against that frozen instrument. Phase 7 consolidates the write-up.
 
 | # | Milestone | Status | Where |
 | --- | --- | --- | --- |
@@ -106,9 +105,9 @@ held-out face validity) are complete and run against that frozen instrument. Pha
 | 2 | Linguistic variables — MFs, breakpoints, signal distributions | ✅ | `development/2_linguistic_variables/` · `decisions/decisions_Phase2.md` |
 | 3 | Rule base — 17-rule Mamdani spine | ✅ **DL-001** | `development/3_rule_base/` · `decisions/decision_log.md` |
 | 4 | End-to-end pipeline test + **LOCK** | ✅ **`rulebase-locked-v1`** | `development/4_pipeline_and_lock/` · `decisions/` |
-| 5 | Full-corpus run + Bingler cheap-talk baseline *(legacy "W3")* | ✅ **DL-004** | `scripts/run_full_corpus.py` · `scripts/bingler_baseline.py` · `scripts/provenance_corpus_run.py` · `artifacts/corpus_run/` · `development/5_corpus_and_baseline/` |
-| 6 | Face validity vs. the contrast set *(legacy "W4")* | ✅ **DL-005** | `scripts/run_contrast_set.py` · `scripts/evaluate_face_validity.py` · `scripts/provenance_contrast_run.py` · `artifacts/contrast_run/` · `development/6_face_validity/` |
-| 7 | Consolidated write-up / paper *(legacy "W5")* | ⏭ **next** | `docs/` |
+| 5 | Full-corpus run + Bingler cheap-talk baseline | ✅ **DL-004** | `scripts/run_full_corpus.py` · `scripts/bingler_baseline.py` · `scripts/provenance_corpus_run.py` · `artifacts/corpus_run/` · `development/5_corpus_and_baseline/` |
+| 6 | Face validity vs. the contrast set | ✅ **DL-005** | `scripts/run_contrast_set.py` · `scripts/evaluate_face_validity.py` · `scripts/provenance_contrast_run.py` · `artifacts/contrast_run/` · `development/6_face_validity/` |
+| 7 | Consolidated write-up / paper | ⏭ **next** | `docs/` |
 
 **Lock discipline:** after `rulebase-locked-v1`, any instrument change is a
 *separate, logged ablation* — never a silent edit. Phases 5–6 ran against the
@@ -140,7 +139,7 @@ uv run python tests/smoke_test_all_models.py
 uv run python scripts/plot_linguistic_variables.py
 uv run python scripts/first_provenance.py
 
-# re-run the locked-instrument evidence (W2 close-out)
+# re-run the Phase 4 locked-instrument evidence
 uv run python scripts/validation/integration_seam_test.py -n 20 --gate 0.5
 uv run python scripts/validation/mf_experiment.py -n 200 --gate 0.5
 uv run python scripts/validation/anchor_verify.py

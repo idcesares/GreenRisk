@@ -2,7 +2,7 @@
 
 Runs rulebase-locked-v1 over the ENTIRE TCFD corpus (not a sample), persisting
 one row per gated paragraph: the four signals, the risk score, and the fired-
-rule trace. This is the per-run wiring the Phase-4 seam test deferred to W3.
+rule trace. This is the per-run wiring that follows the Phase 4 seam test.
 
 Output:
   artifacts/corpus_run/tcfd_scored.csv     one row per gated paragraph

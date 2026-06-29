@@ -1,4 +1,4 @@
-"""W2 Phase 4 Step 2 — membership-function experiment (triangular vs trapezoidal).
+"""Phase 4 Step 2 — membership-function experiment (triangular vs trapezoidal).
 
 Settles the last open instrument decision. The rule base is held FIXED; the only
 thing that varies is the specificity input MF:

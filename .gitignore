@@ -20,3 +20,6 @@ development/
 
 # Ignore the .env file
 .env
+
+# Memory tools
+.codebase-memory/

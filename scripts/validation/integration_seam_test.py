@@ -1,12 +1,12 @@
-"""W2 Phase 4 Step 1 — integration seam test (TCFD only).
+"""Phase 4 Step 1 — integration seam test (TCFD only).
 
 Phase 3 unit-tested each stage. This proves the SEAMS between them hold when the
 flow runs as one artifact: raw paragraph -> gate -> four scorers -> fuzzy ->
 (score, trace), with no manual hand-offs. Every join is an explicit assert, so a
 silent gap fails loudly. One PROV-O graph is emitted to prove the provenance
-hook fires end-to-end (full per-run wiring is a W3 deliverable, not built here).
+hook fires end-to-end; full per-run wiring is completed in Phase 5.
 
-Iteration runs on TCFD ONLY — the contrast set stays sealed until W4.
+Iteration runs on TCFD ONLY — the contrast set stays sealed until Phase 6.
 
 Run:  uv run python scripts/validation/integration_seam_test.py -n 20 --gate 0.5
 Pass: all asserts hold, max |library - rederived| firing ~ 0, one .ttl written.
@@ -111,7 +111,7 @@ def emit_run_provenance(records, gate):
     """Emit one .ttl tracing a representative paragraph through the full chain:
     paragraph -> four model inferences -> fuzzy aggregation -> risk score,
     wrapped in a run-level activity. Proves the provenance hook fires in the
-    integrated flow; it is NOT the per-run wiring (that is W3).
+    integrated flow; it is NOT the full per-run provenance from Phase 5.
     """
     rec = records[0]                                  # exemplar = first kept paragraph
     text, sig, score_val = rec["text"], rec["sig"], rec["score"]

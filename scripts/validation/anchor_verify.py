@@ -1,4 +1,4 @@
-"""W2 Phase 4 Step 3 — Calibration Anchor 1 verification (decided instrument).
+"""Phase 4 Step 3 — Calibration Anchor 1 verification (decided instrument).
 
 Anchor 1 = the classic vague net-zero pledge signature (specificity Low,
 commitment Low, netzero High). Its expectation, 'fires highest-risk', was

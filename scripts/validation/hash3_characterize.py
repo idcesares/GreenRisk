@@ -1,4 +1,4 @@
-"""W2 Phase 4 Step 4 — size the #3 commitment false-positive (TCFD only).
+"""Phase 4 Step 4 — size the #3 commitment false-positive (TCFD only).
 
 #3 is an UPSTREAM defect: the ClimateBERT commitment classifier fires ~0.997 on
 generic 'our policy' boilerplate, so a vague policy statement scores High via S3
