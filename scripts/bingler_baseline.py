@@ -1,8 +1,8 @@
-"""Phase 5 Step 2 - Bingler (2022) cheap-talk baseline + validity comparison.
+"""Cheap-talk baseline comparison (see docs/acknowledgements.md for the citation).
 
-Bingler et al., "Cheap Talk and Cherry-Picking," use the SAME ClimateBERT
-specificity model we do. Their construct: non-specific disclosure = "cheap talk".
-We operationalize the per-paragraph baseline as cheap_talk = 1 - P('spec'),
+Bingler et al. use the SAME ClimateBERT specificity model this project does.
+Their construct: non-specific disclosure = "cheap talk". This script
+operationalizes the per-paragraph baseline as cheap_talk = 1 - P('spec'),
 read straight from the locked corpus run (no model re-run needed).
 
 Asks two questions of the locked instrument vs. this baseline:

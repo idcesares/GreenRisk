@@ -1,4 +1,4 @@
-"""Phase 6 - run-level PROV-O for the held-out contrast-set evaluation.
+"""Run-level PROV-O for the held-out contrast-set evaluation.
 
 Mirrors scripts/provenance_corpus_run.py: binds the held-out results + stats
 (by sha256) to the run that produced them + the 5 pinned model commits + the

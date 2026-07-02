@@ -1,7 +1,7 @@
-"""Phase 6 Step 2 - formal face-validity evaluation of the contrast-set scores.
+"""Formal face-validity evaluation of the contrast-set scores.
 
 Reads the one-shot scores (no model re-run) and evaluates per the FROZEN
-pre-registration (development/6_face_validity/adequacy_report.md):
+pre-registration (see docs/validation.md for the stratification rationale):
   PRIMARY  - separation of in-scope greenwashing vs rigorous (AUC + Mann-Whitney)
   BOUNDARY - out-of-scope greenwashing not flagged (all risk < elevated threshold)
 Small n: a demonstration, not a benchmark - reported with that caveat. Errors vs.
@@ -91,7 +91,7 @@ def main():
     ax.set_xticklabels(order)
     ax.set_ylabel("GreenRisk risk")
     ax.set_ylim(0, 100)
-    ax.set_title(f"Phase 6 face validity  (primary AUC={auc:.2f}; boundary {not_flagged}/{len(oos)})")
+    ax.set_title(f"Held-out face validity  (primary AUC={auc:.2f}; boundary {not_flagged}/{len(oos)})")
     ax.legend(handles=[
         Line2D([0], [0], marker='o', color='w', markerfacecolor=colors['greenwashing'],
                markeredgecolor='k', label='greenwashing', markersize=9),

@@ -1,10 +1,11 @@
-"""Phase 4 Step 3 — Calibration Anchor 1 verification (decided instrument).
+"""Calibration Anchor 1 verification (locked instrument).
 
 Anchor 1 = the classic vague net-zero pledge signature (specificity Low,
-commitment Low, netzero High). Its expectation, 'fires highest-risk', was
-pre-registered BEFORE DL-001 demoted S1. This re-runs it on the decided
-(triangular) instrument and reports the three things the lock record needs:
-does it still max, via which rules, and is it spine- or signature-driven.
+commitment Low, netzero High). Its original expectation, 'fires
+highest-risk', predates the rule that demotes S1 for claim-less vague text
+(see docs/architecture.md). This runs it on the locked (triangular)
+instrument and reports the three things a calibration check needs: does it
+still max, via which rules, and is it spine- or signature-driven.
 
 Contrast set stays sealed — Anchor 1 is a pre-registered signal profile, not a
 corpus paragraph.
@@ -18,14 +19,14 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
 from rule_base import score_paragraph, format_trace
 
-# Pre-registered profile + expectation (see development/calibration_anchors.md).
+# Pre-registered profile + expectation.
 # sentiment is Low and inert here (the net-zero/spine rules cap the score); set
 # Low for a clean 'bare pledge'. Score is 60.38 for any sentiment value.
 ANCHOR1 = {"specificity": 0.05, "commitment": 0.05,
            "sentiment_asymmetry": 0.05, "netzero": 0.95}
-REGISTERED = "fires highest-risk (maximal, ~90) — registered pre-DL-001"
+REGISTERED = "fires highest-risk (maximal, ~90) — the original, pre-lock expectation"
 
-HIGH_BAND = 80.0   # 'maxes' threshold used throughout Phase 3
+HIGH_BAND = 80.0   # 'maxes' threshold
 
 
 def main():

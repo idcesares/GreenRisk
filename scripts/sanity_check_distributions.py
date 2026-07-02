@@ -1,8 +1,9 @@
 """Empirical sanity check for the fuzzy-input breakpoints.
 
-Scores ~200 real TCFD paragraphs through the four fuzzy-input signals on the
-GPU (batched) and plots each distribution with the 0.4 / 0.6 breakpoints
-overlaid. Writes four PNGs and prints summary stats for classifying each.
+Scores ~200 real TCFD paragraphs through the four fuzzy-input signals in
+batches (GPU if available, otherwise CPU — see models.DEVICE) and plots each
+distribution with the 0.4 / 0.6 breakpoints overlaid. Writes four PNGs and
+prints summary stats for classifying each.
 """
 
 import pathlib

@@ -36,15 +36,15 @@ RISK = risk
 RULES = [
     # Tier 1 — Spine: specificity x commitment. Risk = vagueness x CLAIM-strength.
     # Non-increasing in specificity; non-DECREASING in commitment when vague
-    # (P3: a loud pledge with no substance is the greenwashing signature, so
-    # commitment escalates risk for vague text — reverses the original surface).
-    ("S1", [("specificity", "Low"),    ("commitment", "Low")],    "Moderate", "vague, no claim -> disclosure not greenwashing [P3:was High]"),
+    # (a loud pledge with no substance is the greenwashing signature, so
+    # commitment escalates risk for vague text).
+    ("S1", [("specificity", "Low"),    ("commitment", "Low")],    "Moderate", "vague, no claim -> disclosure not greenwashing"),
     ("S2", [("specificity", "Low"),    ("commitment", "Medium")], "Elevated", "some commitment, still vague"),
-    ("S3", [("specificity", "Low"),    ("commitment", "High")],   "High",     "loud pledge, no substance -> greenwashing signature [P3:was Elevated]"),
-    ("S4", [("specificity", "Medium"), ("commitment", "Low")],    "Moderate", "partially specific, no claim [P3:was Elevated]"),
+    ("S3", [("specificity", "Low"),    ("commitment", "High")],   "High",     "loud pledge, no substance -> greenwashing signature"),
+    ("S4", [("specificity", "Medium"), ("commitment", "Low")],    "Moderate", "partially specific, no claim"),
     ("S5", [("specificity", "Medium"), ("commitment", "Medium")], "Moderate", "genuinely middling (rarely fires)"),
-    ("S6", [("specificity", "Medium"), ("commitment", "High")],   "Elevated", "committed, partially specific [P3:was Moderate]"),
-    ("S7", [("specificity", "High"),   ("commitment", "Low")],    "Low",      "specific factual disclosure, no claim [P3:was Moderate]"),
+    ("S6", [("specificity", "Medium"), ("commitment", "High")],   "Elevated", "committed, partially specific"),
+    ("S7", [("specificity", "High"),   ("commitment", "Low")],    "Low",      "specific factual disclosure, no claim"),
     ("S8", [("specificity", "High"),   ("commitment", "Medium")], "Low",      "specific, some commitment"),
     ("S9", [("specificity", "High"),   ("commitment", "High")],   "Low",      "rigorous disclosure"),
     # Tier 2 — Net-zero amplifiers (conditional on vagueness; exonerate when specific)

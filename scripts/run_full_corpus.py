@@ -1,8 +1,9 @@
-"""Phase 5 Step 1 — full-corpus production run of the locked instrument.
+"""Full-corpus production run of the locked instrument.
 
 Runs rulebase-locked-v1 over the ENTIRE TCFD corpus (not a sample), persisting
 one row per gated paragraph: the four signals, the risk score, and the fired-
-rule trace. This is the per-run wiring that follows the Phase 4 seam test.
+rule trace. This is the per-run wiring that follows
+scripts/validation/integration_seam_test.py.
 
 Output:
   artifacts/corpus_run/tcfd_scored.csv     one row per gated paragraph

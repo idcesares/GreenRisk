@@ -1,19 +1,19 @@
 # GreenRisk — Documentation
 
-This directory is reserved for consolidated, public-facing documentation:
-architecture, the fuzzy pipeline, the locked rule base, provenance, and
-reproducibility notes written as a coherent whole rather than a phase-by-phase
-diary.
+- [`architecture.md`](architecture.md) — the full scoring pipeline: the
+  climate-relevance gate, the four ClimateBERT signals, why the project uses
+  fuzzy inference, the membership functions, and the 17-rule Mamdani base,
+  worked through with examples.
+- [`validation.md`](validation.md) — the validity evidence, in two
+  independent layers: a 1,009-paragraph statistical comparison against a
+  published baseline, and a held-out, case-level test against real,
+  regulator-adjudicated companies. Includes the instrument's documented scope
+  limitation.
+- [`acknowledgements.md`](acknowledgements.md) — citations for the ClimateBERT
+  models, the TCFD framework, the fuzzy-inference and provenance standards
+  this project builds on, and the sources behind the held-out case set.
 
-The phase-by-phase working record (kickoffs, decision logs, session summaries)
-lives in `development/`, which is **gitignored** on purpose: it is the raw
-material for the paper, not the production stream.
-
-Current public entry points:
-
-- [`../README.md`](../README.md) — short project overview.
-- [`../MASTER_PLAN.md`](../MASTER_PLAN.md) — canonical architecture, phase map,
-  evidence index, and reproduction commands.
-
-When this directory is expanded, convert the development record into polished
-documentation. Do not copy raw working notes here verbatim.
+For the repository layout, the locked-instrument specification, and the exact
+commands to reproduce every artifact in `artifacts/`, see
+[`../MASTER_PLAN.md`](../MASTER_PLAN.md). For a quick start, see
+[`../README.md`](../README.md).

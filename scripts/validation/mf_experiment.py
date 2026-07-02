@@ -1,7 +1,8 @@
-"""Phase 4 Step 2 — membership-function experiment (triangular vs trapezoidal).
+"""Membership-function experiment (triangular vs trapezoidal).
 
-Settles the last open instrument decision. The rule base is held FIXED; the only
-thing that varies is the specificity input MF:
+Reproduces the comparison that settled the locked instrument's membership-function
+shape. The rule base is held FIXED; the only thing that varies is the specificity
+input MF:
   - triangular  : Low = trimf  [0, 0, 0.4]         (the locked instrument)
   - trapezoidal : Low = trapmf [0, 0, 0.15, 0.4]   (plateau over the near-0 pile-up)
 Medium/High and the other three inputs are identical in both. We score the SAME

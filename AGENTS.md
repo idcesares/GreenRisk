@@ -38,7 +38,7 @@ Run the relevant smoke test before submitting any change. For changes to fuzzy l
 
 ## Commit & Pull Request Guidelines
 
-Recent commits use conventional prefixes such as `feat:` and `docs:` with phase-oriented summaries. Keep messages imperative and scoped, for example `feat: Phase 6 face validity artifacts`.
+Commits use conventional prefixes such as `feat:` and `docs:` with a scoped, imperative summary, for example `feat: add held-out face-validity artifacts`.
 
 Pull requests should include a behavior summary, commands run, artifacts changed, and any linked decision-log entry. Include screenshots only for generated figures or provenance images.
 

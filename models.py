@@ -70,7 +70,7 @@ def _get(name: str):
     if name not in _MODELS:
         model, tokenizer = load(name)
         model.eval()
-        model.to(DEVICE)          # weights live on the GPU after this
+        model.to(DEVICE)          # weights live on DEVICE (GPU or CPU) after this
         _MODELS[name] = (model, tokenizer)
     return _MODELS[name]
 

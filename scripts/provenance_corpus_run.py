@@ -1,7 +1,7 @@
-"""Phase 5 Step 3 - run-level PROV-O provenance for the full-corpus run.
+"""Run-level PROV-O provenance for the full-corpus run.
 
-Phase 4's seam test proved the PER-PARAGRAPH chain wires up. Phase 5 adds the
-full per-run provenance: ONE graph
+scripts/validation/integration_seam_test.py proves the PER-PARAGRAPH chain
+wires up. This script adds the full per-run provenance: ONE graph
 binding the committed results artifact (tcfd_scored.csv, by sha256) to exactly
 the inputs and instrument version that produced it -
 

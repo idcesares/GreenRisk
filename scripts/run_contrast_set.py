@@ -1,16 +1,17 @@
-"""Phase 6 Step 1 - score the contrast set through the frozen instrument.
+"""Score the held-out contrast set through the frozen instrument.
 
 ONE-SHOT held-out evaluation. The instrument (rulebase-locked-v1) has never seen
 this set. The pre-registration (stratum + expectation per case) is hardcoded below
-and committed BEFORE this script is run, so the held-out line is auditable. See
-development/6_face_validity/adequacy_report.md for the rationale.
+and was fixed BEFORE this script was run, so the held-out line is auditable. See
+docs/validation.md for the stratification rationale.
 
 Evaluated downstream as:
   PRIMARY  - in-scope greenwashing (vagueness-based) vs rigorous: expect separation
   BOUNDARY - out-of-scope greenwashing (specificity/omission): predicted misses
 
-Reuses the Phase 5 frozen scoring path. No instrument change. All 15 paragraphs are
-scored; gate status is recorded, NOT used to drop rows (so gate-outs stay visible).
+Reuses the same frozen scoring path as the full-corpus run. No instrument change.
+All 15 paragraphs are scored; gate status is recorded, NOT used to drop rows (so
+gate-outs stay visible).
 
 Inputs:  data/contrast_set.csv  (+ PREREG below)
 Outputs: artifacts/contrast_run/contrast_scored.csv + run_manifest.json
@@ -34,7 +35,7 @@ from rule_base import score_paragraph, ANTS
 
 INSTRUMENT_TAG = "rulebase-locked-v1"
 
-# --- PRE-REGISTRATION (blind, ratified 2026-06-17; adequacy_report.md) ---------
+# --- PRE-REGISTRATION (fixed before scoring; see docs/validation.md) ----------
 # id -> (stratum, expectation). Frozen before scoring; NOT revised after scores.
 PREREG = {
     "GW-001": ("in_scope",     "elevated"),

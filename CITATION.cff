@@ -1,0 +1,76 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "GreenRisk: Explainable Greenwashing-Risk Scoring for Corporate Climate Disclosures"
+abstract: >-
+  GreenRisk scores corporate climate-disclosure paragraphs for greenwashing
+  risk on a 0-100 scale, combining pinned ClimateBERT signal classifiers with
+  a Mamdani fuzzy rule base. Every score ships with an auditable
+  rule-activation trace and a W3C PROV-O provenance graph binding the result
+  to the exact model revisions and instrument version that produced it.
+authors:
+  - family-names: "D'Césares"
+    given-names: Isaac
+    email: isaac.dcesares@ufrj.br
+    affiliation: "Universidade Federal do Rio de Janeiro (UFRJ) — Programa de Pós-Graduação em Informática (PPGI)"
+version: 0.1.0
+date-released: "2026-07-01"
+url: "https://github.com/idcesares/GreenRisk"
+repository-code: "https://github.com/idcesares/GreenRisk"
+license: Apache-2.0
+keywords:
+  - greenwashing
+  - climate disclosure
+  - ESG
+  - explainable AI
+  - fuzzy logic
+  - Mamdani inference
+  - ClimateBERT
+  - natural language processing
+  - provenance
+  - PROV-O
+  - TCFD
+references:
+  - type: article
+    title: "ClimateBERT: A Pretrained Language Model for Climate-Related Text"
+    authors:
+      - family-names: Webersinke
+        given-names: Nicolas
+      - family-names: Kraus
+        given-names: Mathias
+      - family-names: Bingler
+        given-names: Julia
+      - family-names: Leippold
+        given-names: Markus
+    year: 2022
+    doi: "10.48550/arXiv.2212.13631"
+    notes: "Base pretrained language model underlying all five ClimateBERT signal classifiers."
+  - type: article
+    title: "How Cheap Talk in Climate Disclosures Relates to Climate Initiatives, Corporate Emissions, and Reputation Risk"
+    authors:
+      - family-names: Bingler
+        given-names: Julia
+      - family-names: Kraus
+        given-names: Mathias
+      - family-names: Leippold
+        given-names: Markus
+      - family-names: Webersinke
+        given-names: Nicolas
+    year: 2023
+    notes: "Working paper, SSRN 3998435. Source of the climate-detector, climate-specificity, climate-commitment, and climate-sentiment classifiers, and of the 'cheap talk' baseline used in this project's validation."
+  - type: article
+    title: "ClimateBERT-NetZero: Detecting and Assessing Net Zero and Reduction Targets"
+    authors:
+      - family-names: Schimanski
+        given-names: Tobias
+      - family-names: Bingler
+        given-names: Julia
+      - family-names: Hyslop
+        given-names: Camilla
+      - family-names: Kraus
+        given-names: Mathias
+      - family-names: Leippold
+        given-names: Markus
+    year: 2023
+    doi: "10.48550/arXiv.2310.08096"
+    notes: "Source of the netzero-reduction classifier."

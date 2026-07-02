@@ -1,9 +1,10 @@
-"""Phase 4 Step 4 — size the #3 commitment false-positive (TCFD only).
+"""Size the commitment-classifier false-positive tail (TCFD only).
 
-#3 is an UPSTREAM defect: the ClimateBERT commitment classifier fires ~0.997 on
+This is an UPSTREAM defect: the ClimateBERT commitment classifier fires ~0.997 on
 generic 'our policy' boilerplate, so a vague policy statement scores High via S3
 (spec Low and commit High). This is NOT a rule-base bug and is not fixed in the
-fuzzy layer. Phase 4's only job: is it isolated or systematic?
+fuzzy layer (see docs/architecture.md). This script's only job: is it isolated
+or systematic?
 
 Filter the larger gated sample for the signature — high commitment + low
 specificity — count it, see where it lands, and print the matches to read.

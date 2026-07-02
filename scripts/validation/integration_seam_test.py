@@ -1,12 +1,13 @@
-"""Phase 4 Step 1 — integration seam test (TCFD only).
+"""Integration seam test (TCFD only).
 
-Phase 3 unit-tested each stage. This proves the SEAMS between them hold when the
-flow runs as one artifact: raw paragraph -> gate -> four scorers -> fuzzy ->
-(score, trace), with no manual hand-offs. Every join is an explicit assert, so a
-silent gap fails loudly. One PROV-O graph is emitted to prove the provenance
-hook fires end-to-end; full per-run wiring is completed in Phase 5.
+Each pipeline stage is unit-testable on its own. This proves the SEAMS between
+them hold when the flow runs as one artifact: raw paragraph -> gate -> four
+scorers -> fuzzy -> (score, trace), with no manual hand-offs. Every join is an
+explicit assert, so a silent gap fails loudly. One PROV-O graph is emitted to
+prove the provenance hook fires end-to-end; the full per-run provenance is
+produced separately by scripts/provenance_corpus_run.py.
 
-Iteration runs on TCFD ONLY — the contrast set stays sealed until Phase 6.
+Iteration runs on TCFD ONLY — the held-out contrast set is never scored here.
 
 Run:  uv run python scripts/validation/integration_seam_test.py -n 20 --gate 0.5
 Pass: all asserts hold, max |library - rederived| firing ~ 0, one .ttl written.
@@ -40,7 +41,7 @@ def main(n: int, gate: float):
 
     # --- SEAM A: type/key match (assert, don't assume) ---------------------
     # Every fuzzy input the rule base reads must be produced by a scorer, and
-    # vice versa. Low-risk (Phase 3 confirmed the contract) but checked, not eyeballed.
+    # vice versa. Low-risk (the contract is stable) but checked, not eyeballed.
     assert set(SIGNAL_MAP) == set(ANTS), (
         f"signal/key mismatch: {set(SIGNAL_MAP) ^ set(ANTS)}")
 
@@ -111,7 +112,8 @@ def emit_run_provenance(records, gate):
     """Emit one .ttl tracing a representative paragraph through the full chain:
     paragraph -> four model inferences -> fuzzy aggregation -> risk score,
     wrapped in a run-level activity. Proves the provenance hook fires in the
-    integrated flow; it is NOT the full per-run provenance from Phase 5.
+    integrated flow; it is NOT the full per-run provenance (see
+    scripts/provenance_corpus_run.py for that).
     """
     rec = records[0]                                  # exemplar = first kept paragraph
     text, sig, score_val = rec["text"], rec["sig"], rec["score"]
