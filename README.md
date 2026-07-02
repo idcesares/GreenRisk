@@ -1,5 +1,8 @@
 # GreenRisk
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21122389.svg)](https://doi.org/10.5281/zenodo.21122389)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+
 Explainable greenwashing-risk scoring for corporate climate disclosures:
 pinned ClimateBERT signals → a Mamdani fuzzy rule base → an auditable 0–100 risk
 score with a W3C PROV-O provenance graph.
@@ -54,7 +57,11 @@ CPU otherwise — a GPU is not required.
 ## Citation
 
 If you use GreenRisk, please cite it using [`CITATION.cff`](CITATION.cff)
-(GitHub renders a "Cite this repository" button from this file). See
+(GitHub renders a "Cite this repository" button from this file), or via its
+Zenodo archive: **10.5281/zenodo.21122389** — this concept DOI always
+resolves to the latest release; see the
+[Zenodo record](https://doi.org/10.5281/zenodo.21122389) for version-specific
+DOIs (e.g. v0.1.0 is `10.5281/zenodo.21122390`). See
 [`docs/acknowledgements.md`](docs/acknowledgements.md) for the papers and
 models this project is built on.
 
