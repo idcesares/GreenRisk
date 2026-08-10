@@ -1,5 +1,8 @@
 # GreenRisk — Documentation
 
+- [`greenrisk_paper.pdf`](greenrisk_paper.pdf) — the final project paper,
+  *GreenRisk: An Explainable-by-Construction Fuzzy Instrument for Scoring
+  Greenwashing Risk in Corporate Climate Disclosures*.
 - [`architecture.md`](architecture.md) — the full scoring pipeline: the
   climate-relevance gate, the four ClimateBERT signals, why the project uses
   fuzzy inference, the membership functions, and the 17-rule Mamdani base,

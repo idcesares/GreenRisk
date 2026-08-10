@@ -64,7 +64,7 @@ GreenRisk/
 ├── tests/                       smoke tests (models, detector, provenance)
 ├── data/                        contrast_set.csv — the held-out Layer 2 case set
 ├── artifacts/                   figures/ (plots) · provenance/ (.ttl/.json/.png) · corpus_run/ · contrast_run/
-├── docs/                        architecture.md · validation.md · acknowledgements.md
+├── docs/                        greenrisk_paper.pdf · architecture.md · validation.md · acknowledgements.md
 └── development/                 internal working record (design notes, decision log);
                                   gitignored, not part of the public release
 ```
