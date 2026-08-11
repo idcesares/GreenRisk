@@ -6,9 +6,9 @@ GreenRisk is a Python 3.12 project for explainable greenwashing-risk scoring. `M
 
 - Core instrument modules are at the repository root: `models.py`, `linguistic_variables.py`, `rule_base.py`, and `main.py`.
 - Pipeline scripts live in `scripts/`; locked validation harnesses live in `scripts/validation/`.
-- Smoke tests live in `tests/` and are executable Python scripts, not a pytest suite.
+- Smoke tests live in `tests/` and are executable Python scripts, not a pytest suite. `tests/property_test_rule_base.py` asserts the locked rule base's documented properties and needs no model download.
 - Input data is under `data/`; generated, committed outputs are under `artifacts/`.
-- `docs/` is for consolidated public documentation. `development/` is intentionally gitignored process material.
+- `docs/` is for consolidated public documentation, including `decisions.md` (the public decision record) and the project paper. `development/` is intentionally gitignored process material.
 
 ## Build, Test, and Development Commands
 
@@ -34,7 +34,7 @@ Keep the scoring instrument explicit over clever abstraction. Changes to `MODEL_
 
 ## Testing Guidelines
 
-Run the relevant smoke test before submitting any change. For changes to fuzzy logic, provenance, model mappings, or artifacts, also run the matching script in `scripts/validation/` or the artifact producer you touched. Do not describe tests as pytest-based unless a pytest suite is added.
+Run the relevant smoke test before submitting any change. For changes to fuzzy logic, provenance, model mappings, or artifacts, also run the matching script in `scripts/validation/` or the artifact producer you touched. Any change touching `RULES` or the membership functions must also pass `uv run python tests/property_test_rule_base.py`. Do not describe tests as pytest-based unless a pytest suite is added.
 
 ## Commit & Pull Request Guidelines
 
