@@ -15,6 +15,9 @@ Instrument status: frozen at tag `rulebase-locked-v1`.
 
 ## Documentation
 
+- [`docs/greenrisk_paper.pdf`](docs/greenrisk_paper.pdf) — the final project
+  paper, *GreenRisk: An Explainable-by-Construction Fuzzy Instrument for
+  Scoring Greenwashing Risk in Corporate Climate Disclosures*.
 - [`docs/architecture.md`](docs/architecture.md) — the full pipeline: the
   climate-relevance gate, the four signals, the fuzzy rule base, and the
   design rationale behind it.
@@ -38,7 +41,7 @@ Instrument status: frozen at tag `rulebase-locked-v1`.
   integrated scoring.
 - `data/contrast_set.csv` — held-out contrast set used after the lock.
 - `artifacts/` — committed outputs used by the validity argument.
-- `docs/` — public documentation (architecture, validation, acknowledgements).
+- `docs/` — public documentation and the final project paper.
 
 ## Quick Start
 
