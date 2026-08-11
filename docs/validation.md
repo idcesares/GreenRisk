@@ -7,7 +7,8 @@ regulator-adjudicated examples. It also states the instrument's scope limit
 plainly, with the specific cases that expose it.
 
 Both layers were run against the same **frozen instrument**
-(`rulebase-locked-v1`, see [Architecture §7](architecture.md#7-the-locked-instrument)).
+(`rulebase-locked-v1`, see [Architecture §7](architecture.md#7-the-locked-instrument);
+the decisions that produced it are recorded in [`decisions.md`](decisions.md)).
 The held-out case set (Layer 2) was not inspected or scored until after the
 instrument was frozen, and its evaluation criteria were fixed in advance of
 scoring — the point of freezing the instrument first is that neither layer of
@@ -76,7 +77,11 @@ numbers. The case set was stratified into **in-scope** (vagueness-based),
 **boundary** (a promotional/awards case, probing the opportunity-framing
 tier), and **out-of-scope** (specificity-based) groups before any scoring took
 place, so that out-of-scope misses are read as a documented scope limit rather
-than as a failure of the primary claim.
+than as a failure of the primary claim. The full stratification, with the
+per-case expectation registered for each of the 15 cases, is published in
+[Appendix A of the decision record](decisions.md#appendix-a--phase-6-pre-registration-ratified-blind);
+its ratification date is independently recorded in
+`artifacts/contrast_run/run_manifest.json` and in the contrast-run PROV-O graph.
 
 **Primary result.** In-scope greenwashing separates cleanly from the rigorous
 reference group: AUC = 0.87 (n = 5 vs. 6; Mann-Whitney U = 26, one-sided
@@ -85,12 +90,16 @@ regulator-grounded case sets do not scale the way a corpus run does — so this
 is reported as a demonstration with a large effect size, not as a
 statistically definitive result on its own; it is the second, independent
 layer of evidence alongside Layer 1's corpus-scale statistics, not a
-replacement for it.
+replacement for it. At the flag threshold of 50, sensitivity within the
+in-scope group is 3/5 (0.60) and specificity within the reference group is
+5/6 (0.83); the individual misses are itemized in the scope-limitation
+section below.
 
-**Boundary result.** All 4 of the out-of-scope, specificity-based
-greenwashing cases scored below the flag threshold, exactly as predicted in
-advance — confirming that the instrument's blind spot is precise and
-predictable rather than arbitrary.
+**Boundary result.** All 4 greenwashing cases held outside the primary
+comparison scored below the flag threshold of 50, exactly as predicted in
+advance: the 3 out-of-scope, specificity-based cases (`GW-004`, `GW-008`,
+`GW-009`) and the 1 boundary promotional case (`GW-006`). This confirms that
+the instrument's blind spot is precise and predictable rather than arbitrary.
 
 ## Scope limitation: specificity is a proxy, and proxies can be fooled
 
