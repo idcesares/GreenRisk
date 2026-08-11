@@ -122,7 +122,8 @@ contain, rather than in absolute terms). A trapezoidal alternative for the
 `specificity` "Low" term — giving it a flat plateau near zero instead of a
 single-point peak — was evaluated against the same 162-paragraph validation
 sample and produced identical per-band counts and zero band-boundary
-crossings; the simpler triangular form is used everywhere. The trapezoidal
+crossings; the simpler triangular form is used everywhere
+([DL-002](decisions.md#dl-002--membership-function-shape-triangular-kept)). The trapezoidal
 variant remains in `linguistic_variables.py` (`specificity_trap`) as a
 documented, reproducible comparison point, not as part of the scoring path.
 
@@ -138,11 +139,20 @@ The central design principle is:
 A vague paragraph that makes **no claim** is a weak disclosure, not
 greenwashing — it simply has nothing to evaluate. A vague paragraph that makes
 a **confident, unspecific claim** is the classic greenwashing signature: the
-promise without the substance behind it. The rule base is built so that risk
-is monotone **non-increasing** in specificity, and monotone **non-decreasing**
-in commitment specifically when specificity is low — a loud, unsubstantiated
-pledge is scored higher than either a quiet non-claim or a specific,
-substantiated one.
+promise without the substance behind it. The spine is built so that the risk
+term it assigns is monotone **non-increasing** in specificity, and monotone
+**non-decreasing** in commitment specifically when specificity is low — a loud,
+unsubstantiated pledge is scored higher than either a quiet non-claim or a
+specific, substantiated one.
+
+That ordering is exact on the rule table, and it survives defuzzification: with
+the amplifier tiers inactive, the 0–100 surface deviates from it by at most 1.77
+risk points, at term-overlap points, without ever crossing a band boundary. The
+amplifier tiers add bounded, intentional exceptions — rules conditioned on *low*
+commitment (N2, O2) withdraw as commitment rises, which can lower the aggregate
+score by up to 6.35 points in that region. All four statements are checked by
+[`tests/property_test_rule_base.py`](../tests/property_test_rule_base.py), which
+runs without loading any language model.
 
 The 17 rules are organized into four tiers:
 
@@ -193,7 +203,10 @@ Two short paragraphs illustrate why the spine is shaped this way:
 An earlier version of the rule base scored both examples as maximal risk,
 because it treated "vague" and "greenwashing" as synonyms without checking
 whether a claim was actually being made. The spine above is the corrected
-version, and is the one implemented in `rule_base.py`.
+version, and is the one implemented in `rule_base.py`. The correction, the
+evidence that forced it, and the five spine cells it changed are recorded as
+[DL-001](decisions.md#dl-001--demoting-the-absence-corner) in the decision
+record.
 
 ### A documented limitation of the commitment signal
 
@@ -226,6 +239,8 @@ membership functions, model revisions, or signal mappings is treated as a
 separate, explicitly logged instrument change — never a silent edit. This
 matters because the validation evidence in [`docs/validation.md`](validation.md)
 was collected against this exact, unchanging instrument, including a
-held-out test set that was not read or scored until after the freeze. See
+held-out test set that was not read or scored until after the freeze. Every
+decision that went into the locked state, and the evidence behind each one, is
+recorded in [`docs/decisions.md`](decisions.md). See
 [`MASTER_PLAN.md`](../MASTER_PLAN.md) for the repository map and reproduction
 commands.
