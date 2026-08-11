@@ -39,6 +39,24 @@ keywords:
   - TCFD
 references:
   - type: article
+    title: "GreenRisk: An Explainable-by-Construction Fuzzy Instrument for Scoring Greenwashing Risk in Corporate Climate Disclosures"
+    authors:
+      - family-names: "D'Césares de Carvalho Lima"
+        given-names: Isaac
+        email: isaac.dcesares@ufrj.br
+        affiliation: "Programa de Pós-Graduação em Informática (PPGI), Universidade Federal do Rio de Janeiro"
+      - family-names: "Machado Campos"
+        given-names: "Maria Luiza"
+        email: mluiza@ppgi.ufrj.br
+        affiliation: "Programa de Pós-Graduação em Informática (PPGI), Universidade Federal do Rio de Janeiro"
+      - family-names: "Serra da Cruz"
+        given-names: "Sérgio Manuel"
+        email: serra@ppgi.ufrj.br
+        affiliation: "Programa de Pós-Graduação em Informática (PPGI), Universidade Federal do Rio de Janeiro"
+    year: 2026
+    url: "https://github.com/idcesares/GreenRisk/blob/master/docs/greenrisk_paper.pdf"
+    notes: "The paper describing this instrument, its design decisions, and its two-layer evaluation. Included in the repository as docs/greenrisk_paper.pdf."
+  - type: article
     title: "ClimateBERT: A Pretrained Language Model for Climate-Related Text"
     authors:
       - family-names: Webersinke

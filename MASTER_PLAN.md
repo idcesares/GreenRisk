@@ -4,6 +4,8 @@
 > reproduce every committed artifact. For the pipeline design and the
 > reasoning behind it, see [`docs/architecture.md`](docs/architecture.md).
 > For the validity evidence, see [`docs/validation.md`](docs/validation.md).
+> For the decisions that produced the locked instrument, see
+> [`docs/decisions.md`](docs/decisions.md).
 
 Instrument status: **frozen at tag `rulebase-locked-v1`.** After this freeze,
 any change to the rules, membership functions, model revisions, or signal
@@ -61,10 +63,13 @@ GreenRisk/
 │       ├── mf_experiment.py           triangular vs. trapezoidal membership-function comparison
 │       ├── anchor_verify.py           calibration-anchor verification
 │       └── hash3_characterize.py      sizes the commitment-classifier false-positive tail
-├── tests/                       smoke tests (models, detector, provenance)
+├── tests/                       smoke tests (models, detector, provenance) +
+│                                property_test_rule_base.py (locked-instrument
+│                                properties; no model download required)
 ├── data/                        contrast_set.csv — the held-out Layer 2 case set
 ├── artifacts/                   figures/ (plots) · provenance/ (.ttl/.json/.png) · corpus_run/ · contrast_run/
-├── docs/                        greenrisk_paper.pdf · architecture.md · validation.md · acknowledgements.md
+├── docs/                        greenrisk_paper.pdf · architecture.md · validation.md ·
+│                                  decisions.md · ai-usage.md · acknowledgements.md
 └── development/                 internal working record (design notes, decision log);
                                   gitignored, not part of the public release
 ```
@@ -100,6 +105,9 @@ uv run python scripts/provenance_contrast_run.py
 uv run python tests/smoke_test_all_models.py
 uv run python tests/smoke_test_detector_model.py
 uv run python tests/smoke_test_provenance.py
+
+# locked rule-base properties (no model download; runs in seconds)
+uv run python tests/property_test_rule_base.py
 ```
 
 All corpus-scale runs use `climatebert/tcfd_recommendations` (TCFD only). The
@@ -117,8 +125,14 @@ one.
   `tests/`, `data/`, `artifacts/`, `docs/`, this file. Gitignored:
   `development/` (design notes, decision log, internal working material).
 - **The decision log is append-only.** Every instrument change gets a
-  logged entry before it is relied on, in `development/decisions/` (internal;
-  the resulting rationale is written up for public consumption in
-  `docs/architecture.md` and `docs/validation.md`).
+  logged entry before it is relied on, in `development/decisions/` (internal
+  working log). The public record of those decisions — the `DL-00x` entries
+  cited by the paper, the lock, and the blind pre-registration of the held-out
+  test — is [`docs/decisions.md`](docs/decisions.md), with the resulting
+  rationale written up in `docs/architecture.md` and `docs/validation.md`.
+- **Claims about the rule base are tested, not just written.** The properties
+  stated in `docs/architecture.md` §5 and `docs/decisions.md` (DL-001) are
+  asserted in `tests/property_test_rule_base.py`, so a change that breaks them
+  fails loudly.
 - **Models are pinned** by commit revision in `models.MODEL_REGISTRY` for
   bit-identical reproducibility; PROV-O graphs record the resulting hashes.
