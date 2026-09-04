@@ -1,17 +1,47 @@
 {
+  "schema_version": "2.0",
+  "software_version": "0.2.0-research",
+  "source": {
+    "commit": "8b2f4615c1ab653000fc5413bac23d83c422098a",
+    "dirty": "not recorded by the legacy runner"
+  },
   "instrument_tag": "rulebase-locked-v1",
-  "dataset": "data/contrast_set.csv (held-out)",
+  "instrument_commit": "a40288ac8eacfe0de1987884ec03bea9457972c5",
+  "dataset": "data/contrast_set.csv",
+  "dataset_sha256": "1ce0dcea54fba8fb49c2c8827e93280098ff5e286e41800e784fcfeb383e30c6",
   "gate": 0.5,
   "batch_size": 32,
   "n": 15,
   "n_gate_pass": 15,
-  "prereg_ratified": "2026-06-17",
-  "model_hashes": {
+  "protocol_status": "expectations recorded in the same public commit as first results; not an externally timestamped preregistration",
+  "expectations_recorded": "2026-06-17",
+  "model_repositories": {
+    "detector": "climatebert/distilroberta-base-climate-detector",
+    "specificity": "climatebert/distilroberta-base-climate-specificity",
+    "commitment": "climatebert/distilroberta-base-climate-commitment",
+    "sentiment": "climatebert/distilroberta-base-climate-sentiment",
+    "netzero": "climatebert/netzero-reduction"
+  },
+  "model_revisions": {
     "detector": "2c3bc660d45a59e31b35f5d3e365ee4f59fdf76c",
     "specificity": "4ada96ed4bf5c3a7a711282e41f1ab9b29f0ddea",
     "commitment": "17337c3292df16a8fe93b1505dfe4122d50a4c91",
     "sentiment": "e9f9a94ee4263f5ad5cfc97b8539a497fc88aa7d",
     "netzero": "25cf57e30613a2156fee1fe3f917036df4a5c0d1"
   },
-  "timestamp_utc": "2026-06-17T12:35:37.175929+00:00"
+  "environment": {
+    "status": "not recorded by the legacy runner"
+  },
+  "uv_lock_sha256": "63d43a96c5f0931efbf4aa7aaec84bfc1fcb54e94c1746ad54cc2bf76eae70e9",
+  "outputs": {
+    "contrast_scored.csv": {
+      "sha256": "8ddcb06b0950150807df1cc1c359bf4f47027c9e7f41bc74e5078a1f91c69bb0",
+      "rows": 15
+    },
+    "face_validity_stats.json": {
+      "sha256": "30539bcaf8d72cba60d21416324beb2fc2c1ed55b2d3e965e16e4e5d25cceb31"
+    }
+  },
+  "timestamp_utc": "2026-06-17T12:35:37.175929+00:00",
+  "integrity_note": "Expanded on 2026-09-04 from immutable Git history; unavailable runtime details are explicitly marked rather than inferred."
 }

@@ -24,10 +24,9 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.stats import spearmanr, pearsonr
+import pandas as pd
+from scipy.stats import pearsonr, spearmanr
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CSV = ROOT / "artifacts" / "corpus_run" / "tcfd_scored.csv"

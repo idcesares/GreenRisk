@@ -1,14 +1,18 @@
 """Emit the foundation PROV-O graph for one detector inference example."""
 
+from __future__ import annotations
+
 import hashlib
 import os
 import shutil
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from prov.dot import prov_to_dot
-from prov.model import Namespace, ProvDocument
+from greenrisk import __version__
 
+if TYPE_CHECKING:
+    from prov.model import ProvDocument
 
 TEST_PARAGRAPH = (
     "We are committed to achieving net-zero greenhouse gas emissions across "
@@ -54,14 +58,16 @@ def build_first_provenance(
 ) -> ProvDocument:
     """Build a minimal PROV-O graph for one paragraph-level model inference."""
 
+    from prov.model import Namespace, ProvDocument
+
     doc = ProvDocument()
-    gr = Namespace("gr", "https://greenrisk.ppgi.ufrj.br/prov/")
+    gr = Namespace("gr", "https://github.com/idcesares/GreenRisk/prov/")
     hf = Namespace("hf", "https://huggingface.co/")
-    doc.set_default_namespace("https://greenrisk.ppgi.ufrj.br/prov/")
+    doc.set_default_namespace("https://github.com/idcesares/GreenRisk/prov/")
     doc.add_namespace(gr)
     doc.add_namespace(hf)
 
-    para_hash = hashlib.sha256(paragraph_text.encode()).hexdigest()[:12]
+    para_hash = hashlib.sha256(paragraph_text.encode()).hexdigest()
     model_slug = model_name.split("/")[-1]
 
     paragraph = doc.entity(
@@ -91,7 +97,7 @@ def build_first_provenance(
         },
     )
 
-    timestamp = datetime.now(timezone.utc)
+    timestamp = datetime.now(UTC)
     inference = doc.activity(
         f"gr:inference_{para_hash}_{model_slug}",
         timestamp,
@@ -105,10 +111,10 @@ def build_first_provenance(
         },
     )
     pipeline = doc.agent(
-        "gr:GreenRiskPipeline_v0.1",
+        f"gr:GreenRiskPipeline_v{__version__}",
         {
             "prov:type": "prov:SoftwareAgent",
-            "gr:version": "0.1.0",
+            "gr:version": __version__,
         },
     )
 
@@ -122,6 +128,8 @@ def build_first_provenance(
 
 
 def write_outputs(doc: ProvDocument, output_dir: Path) -> None:
+    from prov.dot import prov_to_dot
+
     output_dir.mkdir(parents=True, exist_ok=True)
 
     ttl_path = output_dir / "first_provenance.ttl"

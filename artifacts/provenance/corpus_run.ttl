@@ -1,4 +1,4 @@
-@prefix gr: <https://greenrisk.ppgi.ufrj.br/prov/> .
+@prefix gr: <https://github.com/idcesares/GreenRisk/prov/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -9,11 +9,11 @@ gr:tcfd_scored_csv a prov:Entity,
     prov:wasGeneratedBy gr:corpus_run ;
     gr:filename "tcfd_scored.csv"^^xsd:string ;
     gr:n_rows "1009"^^xsd:string ;
-    gr:sha256 "7c038d14762489c6d9c2b1d6758ebe75d4fc7891e3c4bfbdf2ff335b5910bd12"^^xsd:string .
+    gr:sha256 "f936f40ee7a3398e1b60b8583e1d2fa9e29143f66c1de7444ff3e3a4ac8de678"^^xsd:string .
 
-gr:GreenRiskPipeline_v0.2 a prov:Agent,
+gr:GreenRiskPipeline_v0.2.0-research a prov:Agent,
         "prov:SoftwareAgent"^^xsd:string ;
-    gr:version "0.2.0"^^xsd:string .
+    gr:version "0.2.0-research"^^xsd:string .
 
 gr:corpus_run a prov:Activity,
         "gr:CorpusRun"^^xsd:string ;
@@ -26,7 +26,7 @@ gr:corpus_run a prov:Activity,
         <https://huggingface.co/climatebert/distilroberta-base-climate-sentiment>,
         <https://huggingface.co/climatebert/distilroberta-base-climate-specificity>,
         <https://huggingface.co/climatebert/netzero-reduction> ;
-    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2.0-research ;
     gr:batch_size "32"^^xsd:string ;
     gr:gate "0.5"^^xsd:string ;
     gr:n_kept "1009"^^xsd:string ;
@@ -60,10 +60,13 @@ gr:corpus_run a prov:Activity,
 gr:dataset_tcfd a prov:Entity,
         "gr:Corpus"^^xsd:string ;
     gr:n_total "1300"^^xsd:string ;
-    gr:name "climatebert/tcfd_recommendations"^^xsd:string .
+    gr:name "climatebert/tcfd_recommendations"^^xsd:string ;
+    gr:revision "aee5c98f0bf7835bfb08308ffc7c17216657976b"^^xsd:string ;
+    gr:sha256 "1f16bb38a021aeafad6935eb5aa3f072c2e51b3dcf01eaee88a32ef537029f1f"^^xsd:string .
 
 gr:instrument_rulebase-locked-v1 a prov:Entity,
         "gr:FuzzyInstrument"^^xsd:string ;
+    gr:commit "a40288ac8eacfe0de1987884ec03bea9457972c5"^^xsd:string ;
     gr:defuzz "Mamdani/centroid"^^xsd:string ;
     gr:n_rules "17"^^xsd:string ;
     gr:tag "rulebase-locked-v1"^^xsd:string .

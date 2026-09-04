@@ -11,17 +11,19 @@ Assumes paragraphs are already climate-gated upstream; this layer only scores
 the four construct-aligned signals.
 """
 import functools
+import math
 import operator
+from collections.abc import Mapping
 
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 
-from linguistic_variables import (
-    specificity,
+from .linguistic_variables import (
     commitment,
-    sentiment_asymmetry,
     netzero,
     risk,
+    sentiment_asymmetry,
+    specificity,
 )
 
 ANTS = {
@@ -74,12 +76,49 @@ def _term_membership(variable, term, x):
     a = ANTS[variable]
     return float(fuzz.interp_membership(a.universe, a[term].mf, x))
 
-def score_paragraph(signals):
+def _validated_signals(signals: Mapping[str, float]) -> dict[str, float]:
+    """Validate and normalize a complete GreenRisk signal mapping.
+
+    scikit-fuzzy clips out-of-universe inputs by default. Silent clipping is
+    unsuitable for an auditable scoring API, so values outside [0, 1], missing
+    signals, unexpected signals, booleans, and non-finite numbers are rejected
+    before they reach the control system.
+    """
+    if not isinstance(signals, Mapping):
+        raise TypeError("signals must be a mapping of signal names to probabilities")
+
+    expected = set(ANTS)
+    received = set(signals)
+    missing = sorted(expected - received)
+    unexpected = sorted(received - expected)
+    if missing or unexpected:
+        details = []
+        if missing:
+            details.append(f"missing={missing}")
+        if unexpected:
+            details.append(f"unexpected={unexpected}")
+        raise ValueError("invalid signal keys: " + ", ".join(details))
+
+    validated: dict[str, float] = {}
+    for name in ANTS:
+        value = signals[name]
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise TypeError(f"{name} must be a finite number in [0, 1]")
+        value = float(value)
+        if not math.isfinite(value) or not 0.0 <= value <= 1.0:
+            raise ValueError(f"{name} must be a finite number in [0, 1], got {value!r}")
+        validated[name] = value
+    return validated
+
+
+def score_paragraph(signals: Mapping[str, float]):
     """signals: {input_name: value in [0, 1]} for all four inputs.
 
     Returns (risk_score, trace), where trace is a list of fired rules sorted by
     firing strength, each {'rule', 'fire', 'consequent', 'note'}.
     """
+    signals = _validated_signals(signals)
+
     # Fresh simulation per call avoids scikit-fuzzy's cross-run state caching.
     sim = ctrl.ControlSystemSimulation(_SYSTEM)
     for name, value in signals.items():
@@ -90,12 +129,12 @@ def score_paragraph(signals):
     for rid, terms, consequent, note in RULES:
         firing = min(_term_membership(v, t, signals[v]) for v, t in terms)  # AND = min
         if firing > 1e-6:
-            trace.append({"rule": rid, "fire": round(firing, 3),
+            trace.append({"rule": rid, "fire": firing,
                           "consequent": consequent, "note": note})
     trace.sort(key=lambda d: d["fire"], reverse=True)
     return round(float(sim.output["risk"]), 2), trace
 
-def library_firings(signals):
+def library_firings(signals: Mapping[str, float]):
     """Read-only audit hook: each rule's firing strength as computed by
     scikit-fuzzy's OWN engine (not our re-derivation).
 
@@ -106,6 +145,7 @@ def library_firings(signals):
 
     Returns {rule_id: firing in [0, 1]} for every rule (0.0 if it did not fire).
     """
+    signals = _validated_signals(signals)
     sim = ctrl.ControlSystemSimulation(_SYSTEM)
     for name, value in signals.items():
         sim.input[name] = value

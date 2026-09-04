@@ -1,138 +1,117 @@
 # GreenRisk — Master Plan
 
-> Canonical map of the repository: what exists, where it lives, and how to
-> reproduce every committed artifact. For the pipeline design and the
-> reasoning behind it, see [`docs/architecture.md`](docs/architecture.md).
-> For the validity evidence, see [`docs/validation.md`](docs/validation.md).
-> For the decisions that produced the locked instrument, see
-> [`docs/decisions.md`](docs/decisions.md).
+This is the canonical repository map and reproducibility contract. The
+numerical instrument is frozen at `rulebase-locked-v1` (commit
+`a40288ac8eacfe0de1987884ec03bea9457972c5`). Changes to `RULES`, membership
+functions, model revisions, or signal mappings require a separately identified
+and logged ablation. Packaging, validation, provenance, and documentation may
+evolve without altering that instrument.
 
-Instrument status: **frozen at tag `rulebase-locked-v1`.** After this freeze,
-any change to the rules, membership functions, model revisions, or signal
-mappings is a separate, explicitly logged instrument change — never a silent
-edit. The validity evidence in `docs/validation.md` was produced against this
-exact, unchanging instrument, including a held-out case set that was not
-inspected or scored until after the freeze.
+## 1. Locked instrument
 
-## 1. Locked instrument at a glance
+| Input | Pinned classifier output |
+| --- | --- |
+| `specificity` | climate-specificity `P(spec)` |
+| `commitment` | climate-commitment `P(yes)` |
+| `sentiment_asymmetry` | climate-sentiment `P(opportunity)` |
+| `netzero` | netzero-reduction `P(net-zero)` |
+| climate gate | climate-detector `P(yes) ≥ 0.5` |
 
-**Signals** (construct-direct; risk-direction inversion happens in the rule
-base, not the signal):
-
-| Fuzzy input | Model | Label read |
-| --- | --- | --- |
-| `specificity` | climate-specificity | `P('spec')` |
-| `commitment` | climate-commitment | `P('yes')` |
-| `sentiment_asymmetry` | climate-sentiment | `P('opportunity')` |
-| `netzero` | netzero-reduction | `P('net-zero')` |
-| *(gate)* | climate-detector | `P('yes') ≥ 0.5` — relevance gate, not a fuzzy axis |
-
-**Membership functions** — all triangular:
-- inputs on `[0, 1]`: Low `(0, 0, 0.4)` · Medium `(0.2, 0.5, 0.8)` · High `(0.6, 1, 1)`
-- output `risk` on `[0, 100]`: Low `(0, 0, 30)` · Moderate `(15, 35, 55)` · Elevated `(45, 65, 85)` · High `(70, 100, 100)`
-
-**Rules** — 17, `risk = vagueness × claim-strength`:
-- Tier 1 spine S1–S9 (specificity × commitment)
-- Tier 2 net-zero amplifiers N1–N3
-- Tier 3 opportunity amplifiers O1–O3
-- Tier 4 named signatures G1–G2 (trace legibility for case studies)
-
-Defuzzification: centroid. The full rationale for every choice above —
-including the design alternatives that were tested and not adopted — is in
-[`docs/architecture.md`](docs/architecture.md).
+Inputs use triangular Low `(0,0,0.4)`, Medium `(0.2,0.5,0.8)`, and High
+`(0.6,1,1)` membership functions. Output risk uses Low `(0,0,30)`, Moderate
+`(15,35,55)`, Elevated `(45,65,85)`, and High `(70,100,100)`, with centroid
+defuzzification. The 17 rules comprise spine S1–S9, net-zero N1–N3,
+opportunity O1–O3, and named signatures G1–G2.
 
 ## 2. Repository map
 
-```
-GreenRisk/
-├── MASTER_PLAN.md              this file — the repository map
-├── README.md
-├── LICENSE
-├── models.py  linguistic_variables.py  rule_base.py  main.py   core instrument modules
-├── scripts/                    pipeline & artifact producers
-│   ├── pin_models.py           pin ClimateBERT revisions for reproducibility
-│   ├── first_provenance.py     minimal PROV-O example → artifacts/provenance/
-│   ├── plot_linguistic_variables.py   → artifacts/figures/ (membership-function plots)
-│   ├── sanity_check_distributions.py  → artifacts/figures/ (signal distributions)
-│   ├── run_full_corpus.py, bingler_baseline.py, provenance_corpus_run.py
-│   │     → artifacts/corpus_run/ — Layer 1 validation (docs/validation.md)
-│   ├── run_contrast_set.py, evaluate_face_validity.py, provenance_contrast_run.py
-│   │     → artifacts/contrast_run/ — Layer 2 validation (docs/validation.md)
-│   └── validation/              locked-instrument evidence harnesses
-│       ├── integration_seam_test.py   end-to-end seam test + PROV-O
-│       ├── mf_experiment.py           triangular vs. trapezoidal membership-function comparison
-│       ├── anchor_verify.py           calibration-anchor verification
-│       └── hash3_characterize.py      sizes the commitment-classifier false-positive tail
-├── tests/                       smoke tests (models, detector, provenance) +
-│                                property_test_rule_base.py (locked-instrument
-│                                properties; no model download required)
-├── data/                        contrast_set.csv — the held-out Layer 2 case set
-├── artifacts/                   figures/ (plots) · provenance/ (.ttl/.json/.png) · corpus_run/ · contrast_run/
-├── docs/                        greenrisk_paper.pdf · architecture.md · validation.md ·
-│                                  decisions.md · ai-usage.md · acknowledgements.md
-└── development/                 internal working record (design notes, decision log);
-                                  gitignored, not part of the public release
+```text
+src/greenrisk/              installable package
+  metadata.py               frozen identifiers, model registry, signal map
+  models.py                 optional ClimateBERT inference adapters
+  linguistic_variables.py  membership functions
+  rule_base.py              rules, validation, score and trace
+  provenance.py             per-score PROV-O
+  cli.py                    score-signals and score-text commands
+scripts/                    artifact and research-run producers
+scripts/validation/         research validation harnesses
+tests/                      fast pytest suite and optional model tests
+data/                       contrast-set source and data documentation
+artifacts/                  committed results, figures, manifests, PROV-O
+docs/                       design, evidence, decisions, use policy, paper
+.github/workflows/          fast CI and manually triggered model smoke tests
 ```
 
-## 3. Reproducibility
+## 3. Environments
 
-```powershell
-# pin + verify models (writes pinned_model_hashes.md, gitignored)
-uv run python scripts/pin_models.py
-uv run python tests/smoke_test_all_models.py
+```bash
+# Base fuzzy scorer + tests (no model weights)
+uv sync --frozen --group dev
+uv run pytest -m "not model"
+uv run python scripts/verify_artifact_integrity.py
+uv build
 
-# regenerate committed artifacts
+# Raw-text model inference
+uv sync --frozen --extra models --group dev
+uv run pytest -m model
+uv run python scripts/verify_model_revisions.py
+
+# Full artifact reproduction
+uv sync --frozen --extra research --group dev
+```
+
+The model smoke workflow is manual because it downloads several large model
+artifacts. The normal CI job remains fast and checks packaging, lint, rule-base
+properties, API validation, provenance hashes, and wheel/sdist creation.
+
+## 4. Artifact reproduction
+
+```bash
 uv run python scripts/plot_linguistic_variables.py
 uv run python scripts/first_provenance.py
 
-# re-run the locked-instrument evidence
 uv run python scripts/validation/integration_seam_test.py -n 20 --gate 0.5
 uv run python scripts/validation/mf_experiment.py -n 200 --gate 0.5
 uv run python scripts/validation/anchor_verify.py
 uv run python scripts/validation/hash3_characterize.py -n 500 --gate 0.5
 
-# Layer 1 — full-corpus run + baseline comparison + run-level provenance
 uv run python scripts/run_full_corpus.py --gate 0.5
 uv run python scripts/bingler_baseline.py
 uv run python scripts/provenance_corpus_run.py
 
-# Layer 2 — held-out face validity (contrast set) + provenance
 uv run python scripts/run_contrast_set.py --gate 0.5
 uv run python scripts/evaluate_face_validity.py
 uv run python scripts/provenance_contrast_run.py
-
-# smoke tests
-uv run python tests/smoke_test_all_models.py
-uv run python tests/smoke_test_detector_model.py
-uv run python tests/smoke_test_provenance.py
-
-# locked rule-base properties (no model download; runs in seconds)
-uv run python tests/property_test_rule_base.py
+uv run python scripts/verify_artifact_integrity.py
 ```
 
-All corpus-scale runs use `climatebert/tcfd_recommendations` (TCFD only). The
-contrast set (`data/contrast_set.csv`) is reserved for the one-shot,
-held-out Layer 2 evaluation described in `docs/validation.md`.
+The TCFD dataset is pinned at revision
+`aee5c98f0bf7835bfb08308ffc7c17216657976b`; the train Parquet content SHA-256
+is `1f16bb38a021aeafad6935eb5aa3f072c2e51b3dcf01eaee88a32ef537029f1f`.
+Manifests record exact model revisions, input/output hashes, the instrument
+commit, the lockfile hash, and runtime versions for new runs.
 
-Model inference runs on GPU automatically if a CUDA-capable device is
-available (`torch.cuda.is_available()`), and falls back to CPU otherwise — see
-`models.py`. No GPU is required to run the pipeline; it is only faster with
-one.
+Historical corpus and contrast manifests were expanded using immutable Git and
+Hugging Face records. They explicitly mark original runtime details that were
+not recorded. Their content hashes use Git's normalized LF bytes, enforced by
+`.gitattributes` and verified in CI.
 
-## 4. Conventions
+The current producers intentionally retain full input hashes and unrounded
+signal/trace values, so their serialized CSV bytes differ from the historical
+runs even when numerical scores agree. For byte-identical historical outputs,
+check out the `source.commit` in the relevant manifest and use its recorded
+lockfile. A current-code rerun is a new run and must keep its new manifest and
+PROV-O hashes together.
 
-- **Production vs. process split.** Tracked: core modules, `scripts/`,
-  `tests/`, `data/`, `artifacts/`, `docs/`, this file. Gitignored:
-  `development/` (design notes, decision log, internal working material).
-- **The decision log is append-only.** Every instrument change gets a
-  logged entry before it is relied on, in `development/decisions/` (internal
-  working log). The public record of those decisions — the `DL-00x` entries
-  cited by the paper, the lock, and the blind pre-registration of the held-out
-  test — is [`docs/decisions.md`](docs/decisions.md), with the resulting
-  rationale written up in `docs/architecture.md` and `docs/validation.md`.
-- **Claims about the rule base are tested, not just written.** The properties
-  stated in `docs/architecture.md` §5 and `docs/decisions.md` (DL-001) are
-  asserted in `tests/property_test_rule_base.py`, so a change that breaks them
-  fails loudly.
-- **Models are pinned** by commit revision in `models.MODEL_REGISTRY` for
-  bit-identical reproducibility; PROV-O graphs record the resulting hashes.
+## 5. Governance
+
+- `docs/decisions.md` is append-only for instrument and evidence decisions.
+- Research outputs are immutable evidence. Regenerate them only with the
+  producing script and update the manifest and PROV-O records together.
+- Never silently float model or dataset revisions.
+- Never persist credentials during imports; `HF_TOKEN` is passed only to model
+  download requests when present.
+- Scores must retain raw-probability precision in machine-readable output;
+  rounding is presentation-only except for the locked 2-decimal risk result.
+- Claims must distinguish transparent fuzzy reasoning from learned upstream
+  classifiers and exploratory characterization from independent validation.

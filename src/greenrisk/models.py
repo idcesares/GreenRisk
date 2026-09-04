@@ -1,42 +1,15 @@
-"""GREENRISK ClimateBERT model registry. Hashes pinned for reproducibility."""
+"""GreenRisk ClimateBERT model registry and inference adapters."""
 
 # Use the GPU if a CUDA-enabled torch sees one; otherwise CPU. Auto-detected.
 
 import os
-from dotenv import load_dotenv
+
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-from huggingface_hub import login
 
-load_dotenv()
-token = os.environ.get("HF_TOKEN")
-if token:
-    login(token=token)  # only for gated/private models; safe no-op without a token
+from .metadata import MODEL_REGISTRY, SIGNAL_MAP
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-MODEL_REGISTRY = {
-    "detector": {
-        "repo": "climatebert/distilroberta-base-climate-detector",
-        "revision": "2c3bc660d45a59e31b35f5d3e365ee4f59fdf76c",
-    },
-    "specificity": {
-        "repo": "climatebert/distilroberta-base-climate-specificity",
-        "revision": "4ada96ed4bf5c3a7a711282e41f1ab9b29f0ddea",
-    },
-    "commitment": {
-        "repo": "climatebert/distilroberta-base-climate-commitment",
-        "revision": "17337c3292df16a8fe93b1505dfe4122d50a4c91",
-    },
-    "sentiment": {
-        "repo": "climatebert/distilroberta-base-climate-sentiment",
-        "revision": "e9f9a94ee4263f5ad5cfc97b8539a497fc88aa7d",
-    },
-    "netzero": {
-        "repo": "climatebert/netzero-reduction",
-        "revision": "25cf57e30613a2156fee1fe3f917036df4a5c0d1",
-    },
-}
 
 # ---------------------------------------------------------------------------
 # Model loading
@@ -47,11 +20,15 @@ def load(name: str):
     if name not in MODEL_REGISTRY:
         raise KeyError(f"Unknown model: {name}. Known: {list(MODEL_REGISTRY)}")
     spec = MODEL_REGISTRY[name]
+    # These models are public. If a token is present, pass it to the individual
+    # requests without invoking huggingface_hub.login() or persisting credentials
+    # as an import-time side effect.
+    token = os.environ.get("HF_TOKEN") or None
     model = AutoModelForSequenceClassification.from_pretrained(
-        spec["repo"], revision=spec["revision"]
+        spec["repo"], revision=spec["revision"], token=token
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        spec["repo"], revision=spec["revision"]
+        spec["repo"], revision=spec["revision"], token=token
     )
     return model, tokenizer
 
@@ -75,12 +52,21 @@ def _get(name: str):
     return _MODELS[name]
 
 
+def clear_model_cache() -> None:
+    """Release cached model references, for long-running or memory-bound hosts."""
+    _MODELS.clear()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+
 def score(name: str, text: str) -> dict[str, float]:
     """Run one model on one paragraph; return {label: probability}.
 
     The single generic inference path, reused by every adapter and the
     downstream pipeline. Loads via the cache so repeated calls are cheap.
     """
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError("text must be a non-empty string")
     model, tokenizer = _get(name)
 
     inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=512)
@@ -96,14 +82,6 @@ def score(name: str, text: str) -> dict[str, float]:
 # Fuzzy input variable -> (model short-name, label string to read).
 # Single source of truth for the signal-mapping decisions. Change a label
 # in one place if a model ever changes its id2label.
-SIGNAL_MAP = {
-    "specificity":         ("specificity", "spec"),
-    "commitment":          ("commitment",  "yes"),
-    "sentiment_asymmetry": ("sentiment",   "opportunity"),
-    "netzero":             ("netzero",     "net-zero"),
-}
-
-
 def signal(var: str, text: str) -> float:
     """Return the [0, 1] signal for one fuzzy input variable."""
     if var not in SIGNAL_MAP:
@@ -129,6 +107,15 @@ def score_batch(name: str, texts: list[str], batch_size: int = 32) -> list[dict[
     paragraphs at once. `padding=True` makes a batch's sequences equal length;
     the attention mask ensures padded tokens don't affect the result.
     """
+    if name not in MODEL_REGISTRY:
+        raise KeyError(f"Unknown model: {name}. Known: {list(MODEL_REGISTRY)}")
+    if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size <= 0:
+        raise ValueError("batch_size must be a positive integer")
+    if not isinstance(texts, list) or any(not isinstance(text, str) or not text.strip() for text in texts):
+        raise ValueError("texts must be a list of non-empty strings")
+    if not texts:
+        return []
+
     model, tokenizer = _get(name)
     id2label = model.config.id2label
     results: list[dict[str, float]] = []

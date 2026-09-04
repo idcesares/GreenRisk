@@ -26,11 +26,17 @@ import skfuzzy as fuzz
 from datasets import load_dataset
 from skfuzzy import control as ctrl
 
-from models import all_signals_batch, score_batch
-from rule_base import RULES, RISK, ANTS as TRI_ANTS, score_paragraph
-from linguistic_variables import (
-    specificity_trap, commitment, sentiment_asymmetry, netzero, risk,
+from greenrisk.linguistic_variables import (
+    commitment,
+    netzero,
+    risk,
+    sentiment_asymmetry,
+    specificity_trap,
 )
+from greenrisk.metadata import TCFD_DATASET_ID, TCFD_DATASET_REVISION
+from greenrisk.models import all_signals_batch, score_batch
+from greenrisk.rule_base import ANTS as TRI_ANTS
+from greenrisk.rule_base import RISK, RULES, score_paragraph
 
 # Trapezoidal antecedent set: specificity swapped, the other three unchanged.
 TRAP_ANTS = {
@@ -69,11 +75,11 @@ def band(score):
 
 
 def main(n, gate):
-    ds = load_dataset("climatebert/tcfd_recommendations")["train"]
+    ds = load_dataset(TCFD_DATASET_ID, revision=TCFD_DATASET_REVISION)["train"]
     texts = ds["text"][:n]
 
     climate = [r["yes"] for r in score_batch("detector", texts)]
-    kept_texts = [t for t, c in zip(texts, climate) if c >= gate]
+    kept_texts = [t for t, c in zip(texts, climate, strict=True) if c >= gate]
     print(f"gate>={gate}: {len(kept_texts)}/{len(texts)} climate paras\n")
 
     cols = all_signals_batch(kept_texts)
@@ -89,8 +95,10 @@ def main(n, gate):
         s_tri, _ = score_paragraph(sig)              # locked triangular instrument
         s_trap = score_with(trap_system, TRAP_ANTS, sig)
         b_tri, b_trap = band(s_tri), band(s_trap)
-        tri_scores.append(s_tri); trap_scores.append(s_trap)
-        tri_bands[b_tri] += 1; trap_bands[b_trap] += 1
+        tri_scores.append(s_tri)
+        trap_scores.append(s_trap)
+        tri_bands[b_tri] += 1
+        trap_bands[b_trap] += 1
         if b_tri != b_trap:
             crossings.append((j, sig["specificity"], s_tri, s_trap, b_tri, b_trap))
 

@@ -7,26 +7,25 @@ prints summary stats for classifying each.
 """
 
 import pathlib
-import sys
-
-# Repo root on the path so core modules import when run from anywhere.
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-FIG_DIR = ROOT / "artifacts" / "figures"
-FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from datasets import load_dataset
 
-import models
-from models import all_signals_batch, SIGNAL_MAP
+from greenrisk import models
+from greenrisk.metadata import TCFD_DATASET_ID, TCFD_DATASET_REVISION
+from greenrisk.models import all_signals_batch
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+FIG_DIR = ROOT / "artifacts" / "figures"
+FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 N = 200
 
-ds = load_dataset("climatebert/tcfd_recommendations")
+ds = load_dataset(TCFD_DATASET_ID, revision=TCFD_DATASET_REVISION)
 sample = ds["test"]["text"][:N]
 print(f"Scoring {len(sample)} TCFD paragraphs x 4 models on {models.DEVICE} (batched)...")
 

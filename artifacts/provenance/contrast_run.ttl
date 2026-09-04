@@ -1,4 +1,4 @@
-@prefix gr: <https://greenrisk.ppgi.ufrj.br/prov/> .
+@prefix gr: <https://github.com/idcesares/GreenRisk/prov/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
@@ -8,7 +8,7 @@ gr:contrast_scored_csv a prov:Entity,
         gr:instrument_rulebase-locked-v1 ;
     prov:wasGeneratedBy gr:contrast_run ;
     gr:filename "contrast_scored.csv"^^xsd:string ;
-    gr:sha256 "17c69b77a2ca42ea13450e24a4880a04ac8d620cd886f69d01ecec7d7f92cf59"^^xsd:string .
+    gr:sha256 "8ddcb06b0950150807df1cc1c359bf4f47027c9e7f41bc74e5078a1f91c69bb0"^^xsd:string .
 
 gr:face_validity_stats_json a prov:Entity,
         "gr:FaceValidityStats"^^xsd:string ;
@@ -16,11 +16,11 @@ gr:face_validity_stats_json a prov:Entity,
         gr:instrument_rulebase-locked-v1 ;
     prov:wasGeneratedBy gr:contrast_run ;
     gr:filename "face_validity_stats.json"^^xsd:string ;
-    gr:sha256 "043e9d1973b02bde4dce6c781ecb5b4dfb505bd3f70015ea48f6f18391e9368e"^^xsd:string .
+    gr:sha256 "30539bcaf8d72cba60d21416324beb2fc2c1ed55b2d3e965e16e4e5d25cceb31"^^xsd:string .
 
-gr:GreenRiskPipeline_v0.2 a prov:Agent,
+gr:GreenRiskPipeline_v0.2.0-research a prov:Agent,
         "prov:SoftwareAgent"^^xsd:string ;
-    gr:version "0.2.0"^^xsd:string .
+    gr:version "0.2.0-research"^^xsd:string .
 
 <https://huggingface.co/climatebert/distilroberta-base-climate-commitment> a prov:Entity,
         "gr:PretrainedModel"^^xsd:string ;
@@ -58,19 +58,22 @@ gr:contrast_run a prov:Activity,
         <https://huggingface.co/climatebert/distilroberta-base-climate-sentiment>,
         <https://huggingface.co/climatebert/distilroberta-base-climate-specificity>,
         <https://huggingface.co/climatebert/netzero-reduction> ;
-    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2 ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2.0-research ;
     gr:gate "0.5"^^xsd:string ;
     gr:n "15"^^xsd:string ;
     gr:n_gate_pass "15"^^xsd:string .
 
 gr:contrast_set a prov:Entity,
         "gr:HeldOutContrastSet"^^xsd:string ;
+    gr:expectations_recorded "2026-06-17"^^xsd:string ;
     gr:n "15"^^xsd:string ;
-    gr:name "data/contrast_set.csv (held-out)"^^xsd:string ;
-    gr:prereg_ratified "2026-06-17"^^xsd:string .
+    gr:name "data/contrast_set.csv"^^xsd:string ;
+    gr:protocol_status "expectations recorded in the same public commit as first results; not an externally timestamped preregistration"^^xsd:string ;
+    gr:sha256 "1ce0dcea54fba8fb49c2c8827e93280098ff5e286e41800e784fcfeb383e30c6"^^xsd:string .
 
 gr:instrument_rulebase-locked-v1 a prov:Entity,
         "gr:FuzzyInstrument"^^xsd:string ;
+    gr:commit "a40288ac8eacfe0de1987884ec03bea9457972c5"^^xsd:string ;
     gr:defuzz "Mamdani/centroid"^^xsd:string ;
     gr:n_rules "17"^^xsd:string ;
     gr:tag "rulebase-locked-v1"^^xsd:string .

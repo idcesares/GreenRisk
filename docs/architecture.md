@@ -9,8 +9,9 @@ pieces fit together. It assumes no prior context beyond the [README](../README.m
 GreenRisk reads a single paragraph of corporate climate disclosure and returns
 an **explainable greenwashing-risk score from 0 to 100**, together with:
 
-- an **activation trace** — the exact set of rules that fired and how strongly,
-  so the score is re-derivable by inspection rather than trusted as a black box;
+- an **activation trace** — the exact fuzzy rules that fired and how strongly,
+  so the decision layer is re-derivable even though the upstream classifiers
+  remain learned models;
 - a **W3C PROV-O provenance graph** — a machine-readable record of which model
   revisions, inputs, and instrument version produced that score.
 
@@ -30,16 +31,18 @@ raw paragraph
    ▼  (parallel) provenance   PROV-O graph of the whole run                (scripts/provenance_*.py)
 ```
 
-Core modules, at the repository root:
+Core modules, in `src/greenrisk/`:
 
-- [`models.py`](../models.py) — the pinned model registry, the scoring layer,
+- [`models.py`](../src/greenrisk/models.py) — the model scoring layer
+  and climate-relevance gate. Frozen coordinates live in
+  [`metadata.py`](../src/greenrisk/metadata.py).
   the signal-to-label mapping (`SIGNAL_MAP`), and the climate-relevance gate.
-- [`linguistic_variables.py`](../linguistic_variables.py) — the fuzzy
+- [`linguistic_variables.py`](../src/greenrisk/linguistic_variables.py) — the fuzzy
   variables and their membership functions.
-- [`rule_base.py`](../rule_base.py) — the 17-rule Mamdani base,
+- [`rule_base.py`](../src/greenrisk/rule_base.py) — the 17-rule Mamdani base,
   `score_paragraph`, and the audit trace.
-- [`main.py`](../main.py) — a CLI that scores four precomputed signal values
-  through the locked rule base without loading any language model.
+- [`cli.py`](../src/greenrisk/cli.py) — CLI paths for dependency-light signal
+  scoring and optional raw-text model inference.
 
 ## 2. Stage 1 — the climate-relevance gate
 
@@ -47,7 +50,7 @@ Not every paragraph in a disclosure document is about climate at all. Before
 any of the four risk signals run, a fifth ClimateBERT classifier
 (`climatebert/distilroberta-base-climate-detector`) answers a binary question:
 is this paragraph climate-relevant? The gate is `P('yes') ≥ 0.5`; paragraphs
-that fail it are dropped before they reach the fuzzy layer. `rule_base.py`
+that fail it are dropped before they reach the fuzzy layer. `greenrisk.rule_base`
 assumes this gating has already happened upstream — it only scores paragraphs
 that are already known to be climate-relevant.
 
@@ -124,7 +127,7 @@ single-point peak — was evaluated against the same 162-paragraph validation
 sample and produced identical per-band counts and zero band-boundary
 crossings; the simpler triangular form is used everywhere
 ([DL-002](decisions.md#dl-002--membership-function-shape-triangular-kept)). The trapezoidal
-variant remains in `linguistic_variables.py` (`specificity_trap`) as a
+variant remains in `src/greenrisk/linguistic_variables.py` (`specificity_trap`) as a
 documented, reproducible comparison point, not as part of the scoring path.
 
 Rule combination uses **AND = min**; the final score is obtained by **centroid
@@ -203,7 +206,7 @@ Two short paragraphs illustrate why the spine is shaped this way:
 An earlier version of the rule base scored both examples as maximal risk,
 because it treated "vague" and "greenwashing" as synonyms without checking
 whether a claim was actually being made. The spine above is the corrected
-version, and is the one implemented in `rule_base.py`. The correction, the
+version, and is the one implemented in `src/greenrisk/rule_base.py`. The correction, the
 evidence that forced it, and the five spine cells it changed are recorded as
 [DL-001](decisions.md#dl-001--demoting-the-absence-corner) in the decision
 record.
@@ -239,7 +242,7 @@ membership functions, model revisions, or signal mappings is treated as a
 separate, explicitly logged instrument change — never a silent edit. This
 matters because the validation evidence in [`docs/validation.md`](validation.md)
 was collected against this exact, unchanging instrument, including a
-held-out test set that was not read or scored until after the freeze. Every
+post-lock contrast evaluation that was not used to tune the instrument. Every
 decision that went into the locked state, and the evidence behind each one, is
 recorded in [`docs/decisions.md`](decisions.md). See
 [`MASTER_PLAN.md`](../MASTER_PLAN.md) for the repository map and reproduction

@@ -27,7 +27,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
-from rule_base import RULES, ANTS, RISK, score_paragraph, library_firings  # noqa: E402
+from greenrisk.rule_base import ANTS, RISK, RULES, library_firings, score_paragraph  # noqa: E402
 
 TOL = 1e-6
 # Small movement from centroid aggregation where two input terms overlap.
@@ -75,7 +75,7 @@ def check_integrity():
     spine = {tuple(t[1] for t in terms) for rid, terms, _, _ in RULES if rid.startswith("S")}
     expected = {(s, c) for s in ("Low", "Medium", "High") for c in ("Low", "Medium", "High")}
     assert spine == expected, f"spine does not tile the 3x3 plane: {expected - spine}"
-    print(f"  integrity: 17 rules, unique ids, spine tiles 3x3        OK")
+    print("  integrity: 17 rules, unique ids, spine tiles 3x3        OK")
 
 
 def check_term_order():
@@ -158,6 +158,15 @@ def main():
     check_amplifier_bound()
     check_trace_matches_library()
     print(f"All properties hold ({len(_cache)} grid points evaluated).")
+
+
+def test_locked_rule_base_properties():
+    """Expose the existing exhaustive checks to pytest and local scripts."""
+    check_integrity()
+    check_term_order()
+    check_spine_surface()
+    check_amplifier_bound()
+    check_trace_matches_library()
 
 
 if __name__ == "__main__":

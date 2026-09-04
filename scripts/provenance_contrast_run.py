@@ -9,15 +9,11 @@ Run:  uv run python scripts/provenance_contrast_run.py
 import hashlib
 import json
 import pathlib
-import sys
 from datetime import datetime
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+from prov.model import Namespace, ProvDocument
 
-from prov.model import ProvDocument, Namespace
-
-from models import MODEL_REGISTRY, SIGNAL_MAP
-from rule_base import RULES
+from greenrisk.metadata import INSTRUMENT_METHOD, INSTRUMENT_RULE_COUNT
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 RUN_DIR = ROOT / "artifacts" / "contrast_run"
@@ -34,28 +30,34 @@ def sha256_file(path):
 
 
 def main():
-    manifest = json.loads(MANIFEST.read_text())
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     when = datetime.fromisoformat(manifest["timestamp_utc"])
 
     doc = ProvDocument()
-    gr = Namespace("gr", "https://greenrisk.ppgi.ufrj.br/prov/")
+    gr = Namespace("gr", "https://github.com/idcesares/GreenRisk/prov/")
     hf = Namespace("hf", "https://huggingface.co/")
-    doc.set_default_namespace("https://greenrisk.ppgi.ufrj.br/prov/")
+    doc.set_default_namespace("https://github.com/idcesares/GreenRisk/prov/")
     doc.add_namespace(gr)
     doc.add_namespace(hf)
 
-    agent = doc.agent("gr:GreenRiskPipeline_v0.2",
-                      {"prov:type": "prov:SoftwareAgent", "gr:version": "0.2.0"})
+    version = manifest["software_version"]
+    agent = doc.agent(
+        f"gr:GreenRiskPipeline_v{version}",
+        {"prov:type": "prov:SoftwareAgent", "gr:version": version},
+    )
     instrument = doc.entity("gr:instrument_" + manifest["instrument_tag"],
-                            {"prov:type": "gr:FuzzyInstrument",
+                             {"prov:type": "gr:FuzzyInstrument",
                              "gr:tag": manifest["instrument_tag"],
-                             "gr:n_rules": str(len(RULES)),
-                             "gr:defuzz": "Mamdani/centroid"})
+                             "gr:commit": manifest["instrument_commit"],
+                             "gr:n_rules": str(INSTRUMENT_RULE_COUNT),
+                             "gr:defuzz": INSTRUMENT_METHOD})
     dataset = doc.entity("gr:contrast_set",
-                         {"prov:type": "gr:HeldOutContrastSet",
-                          "gr:name": manifest["dataset"],
+                          {"prov:type": "gr:HeldOutContrastSet",
+                           "gr:name": manifest["dataset"],
+                          "gr:sha256": manifest["dataset_sha256"],
                           "gr:n": str(manifest["n"]),
-                          "gr:prereg_ratified": manifest["prereg_ratified"]})
+                          "gr:protocol_status": manifest["protocol_status"],
+                          "gr:expectations_recorded": manifest["expectations_recorded"]})
     run = doc.activity("gr:contrast_run", when, when,
                        {"prov:type": "gr:HeldOutEvaluation",
                         "gr:gate": str(manifest["gate"]),
@@ -65,12 +67,12 @@ def main():
     doc.used(run, dataset)
     doc.used(run, instrument)
 
-    for short in ["detector"] + [SIGNAL_MAP[v][0] for v in SIGNAL_MAP]:
-        repo = MODEL_REGISTRY[short]["repo"]
+    for short, commit in manifest["model_revisions"].items():
+        repo = manifest["model_repositories"][short]
         e_model = doc.entity("hf:" + repo,
                              {"prov:type": "gr:PretrainedModel",
                               "gr:short_name": short,
-                              "gr:commit_hash": MODEL_REGISTRY[short]["revision"]})
+                              "gr:commit_hash": commit})
         doc.used(run, e_model)
 
     for fname, ptype in [("contrast_scored.csv", "gr:ScoredContrastSet"),
@@ -78,9 +80,16 @@ def main():
         fpath = RUN_DIR / fname
         if not fpath.exists():
             continue
+        expected_hash = manifest["outputs"][fname]["sha256"]
+        actual_hash = sha256_file(fpath)
+        if actual_hash != expected_hash:
+            raise ValueError(
+                f"artifact integrity failure for {fpath}: "
+                f"expected {expected_hash}, got {actual_hash}"
+            )
         e = doc.entity("gr:" + fname.replace(".", "_"),
                        {"prov:type": ptype, "gr:filename": fname,
-                        "gr:sha256": sha256_file(fpath)})
+                        "gr:sha256": expected_hash})
         doc.wasGeneratedBy(e, run)
         doc.wasDerivedFrom(e, dataset)
         doc.wasDerivedFrom(e, instrument)

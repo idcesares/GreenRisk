@@ -1,11 +1,11 @@
 """Formal face-validity evaluation of the contrast-set scores.
 
-Reads the one-shot scores (no model re-run) and evaluates per the FROZEN
-pre-registration (see docs/validation.md for the stratification rationale):
+Reads the historical scores (no model re-run) and evaluates per the recorded
+expectations (see docs/validation.md for the protocol and chronology limit):
   PRIMARY  - separation of in-scope greenwashing vs rigorous (AUC + Mann-Whitney)
   BOUNDARY - out-of-scope greenwashing not flagged (all risk < elevated threshold)
 Small n: a demonstration, not a benchmark - reported with that caveat. Errors vs.
-the pre-registration are logged findings (limitations), never instrument fixes.
+the expectations are logged findings (limitations), never instrument fixes.
 
 Inputs:  artifacts/contrast_run/contrast_scored.csv
 Outputs: artifacts/figures/face_validity.png
@@ -19,9 +19,9 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from scipy.stats import mannwhitneyu
 
@@ -32,9 +32,12 @@ FLAG = 50.0  # risk >= FLAG => "flagged as greenwashing" (Elevated-band onset)
 
 
 def band(r):
-    if r < 22.5: return "Low"
-    if r < 50.0: return "Moderate"
-    if r < 77.5: return "Elevated"
+    if r < 22.5:
+        return "Low"
+    if r < 50.0:
+        return "Moderate"
+    if r < 77.5:
+        return "Elevated"
     return "High"
 
 
@@ -91,7 +94,10 @@ def main():
     ax.set_xticklabels(order)
     ax.set_ylabel("GreenRisk risk")
     ax.set_ylim(0, 100)
-    ax.set_title(f"Held-out face validity  (primary AUC={auc:.2f}; boundary {not_flagged}/{len(oos)})")
+    ax.set_title(
+        f"Post-lock contrast evaluation  "
+        f"(primary AUC={auc:.2f}; boundary {not_flagged}/{len(oos)})"
+    )
     ax.legend(handles=[
         Line2D([0], [0], marker='o', color='w', markerfacecolor=colors['greenwashing'],
                markeredgecolor='k', label='greenwashing', markersize=9),
