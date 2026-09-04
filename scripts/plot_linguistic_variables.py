@@ -5,22 +5,24 @@ Agg backend so it writes files without opening windows or blocking on show().
 """
 
 import pathlib
-import sys
-
-# Repo root on the path so core modules import when run from anywhere.
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-FIG_DIR = ROOT / "artifacts" / "figures"
-FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 import matplotlib
+
 matplotlib.use("Agg")  # render to file; no GUI windows, no blocking
 import matplotlib.pyplot as plt
 
-from linguistic_variables import (
-    specificity, commitment, sentiment_asymmetry, netzero, risk,
+from greenrisk.linguistic_variables import (
+    commitment,
+    netzero,
+    risk,
+    sentiment_asymmetry,
+    specificity,
     specificity_trap,
 )
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+FIG_DIR = ROOT / "artifacts" / "figures"
+FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 # filename -> the variable to plot
 FIGURES = {

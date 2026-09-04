@@ -11,12 +11,14 @@ that shaped it. Entries are reproduced from the project's append-only working
 log; the working log itself carries additional internal process material and is
 not part of the released repository.
 
-Two properties hold across the whole record:
+Two properties are supported by the repository history:
 
-- **Everything before the lock was decided on TCFD evidence only.** The
-  held-out contrast set stayed sealed until after `rulebase-locked-v1`.
-- **Nothing after the lock changed the instrument.** DL-004 and DL-005 are
-  analyses against a frozen artifact, not edits to it.
+- **The numerical instrument was frozen before the contrast evaluation.** No
+  post-lock commit changed its rules, membership functions, model revisions,
+  or signal mappings.
+- **The public record does not independently prove blind preregistration.** The
+  Phase-6 expectations and first results entered Git history together. DL-006
+  records this chronology correction without rewriting the historical entry.
 
 | Entry | Date | Subject | Instrument changed? |
 | --- | --- | --- | --- |
@@ -27,6 +29,7 @@ Two properties hold across the whole record:
 | [LOCK](#lock--rulebase-locked-v1) | 2026-06-16 | Instrument frozen | Frozen |
 | [DL-004](#dl-004--convergent-and-discriminant-validity-vs-the-cheap-talk-baseline) | 2026-06-16 | Layer 1 corpus validity | No (analysis only) |
 | [DL-005](#dl-005--held-out-face-validity-and-the-symmetric-specificity-limitation) | 2026-06-17 | Layer 2 held-out validity | No (analysis only) |
+| [DL-006](#dl-006--repository-hardening-and-claim-boundaries) | 2026-09-04 | Reproducibility and claim audit | No (software only) |
 
 ---
 
@@ -220,7 +223,7 @@ changes a rule's firing only when specificity is the *smallest* antecedent
 decision-relevant — vagueness is typically co-bounded by low commitment, which
 caps the minimum regardless of the specificity MF shape.
 
-`specificity_trap` remains in [`linguistic_variables.py`](../linguistic_variables.py)
+`specificity_trap` remains in [`linguistic_variables.py`](../src/greenrisk/linguistic_variables.py)
 as a documented, reproducible counterfactual, outside the scoring path. It is
 the overlay in the paper's membership-function figure
 (`artifacts/figures/mf_specificity_trap.png`).
@@ -274,9 +277,11 @@ through low specificity. Distinct from the commitment tail, also upstream.
 
 **Date:** 2026-06-16 · **Annotated tag:** `rulebase-locked-v1` · **Commit:** `a40288a`
 
-The rules and the membership functions are frozen together, once, before any
-contact with the held-out contrast set. Anything changed after this point is a
-separate, logged instrument version — never a silent edit.
+The rules and membership functions are frozen together. Git history establishes
+that the contrast scores were produced after this freeze and that no later
+instrument edit fitted the rules to those results. Claims about when humans
+first inspected a locally available case file are process statements rather
+than independently verifiable facts.
 
 **Locked state**
 
@@ -288,7 +293,7 @@ separate, logged instrument version — never a silent edit.
   `sentiment_asymmetry = P('opportunity')`, `netzero = P('net-zero')`; climate
   gate = detector `P('yes') ≥ 0.5`.
 - **Models:** five pinned ClimateBERT revisions, recorded in
-  [`models.py`](../models.py) and re-recorded in every run manifest and PROV-O
+  [`metadata.py`](../src/greenrisk/metadata.py) and re-recorded in every run manifest and PROV-O
   graph.
 
 **Calibration anchor, re-verified on the locked instrument**
@@ -383,17 +388,18 @@ bingler_stats.json}`, `artifacts/figures/bingler_{convergence,discriminant}.png`
 
 ## DL-005 — held-out face validity and the symmetric specificity limitation
 
-**Date:** 2026-06-17 · **Trigger:** the one-shot held-out test against the
-contrast set — the payoff of the lock discipline. Harnesses:
+**Date:** 2026-06-17 · **Trigger:** the post-lock contrast evaluation. Harnesses:
 `scripts/run_contrast_set.py`, `scripts/evaluate_face_validity.py`,
 `scripts/provenance_contrast_run.py`. Instrument unchanged — analysis only.
 
-### Adequacy gate, performed blind
+### Adequacy gate (historical process account)
 
-The contrast set (15 paragraph-level cases: 9 greenwashing from DWS,
+The original project record states that the contrast set (15 paragraph-level cases: 9 greenwashing from DWS,
 Volkswagen and HSBC, regulator-adjudicated; 6 rigorous from Microsoft and
 Ørsted, CDP A-list and SBTi-validated) was inspected **read-only, with no model
-run**, before scoring. Three findings shaped the test:
+run**, before scoring. Git history can verify the instrument freeze and absence
+of post-lock tuning, but not that sequence of local inspection. Three findings
+were recorded:
 
 1. Granularity is already paragraph-level — score directly, no aggregation rule
    needed.
@@ -405,8 +411,8 @@ run**, before scoring. Three findings shaped the test:
 That third finding is why the set was **stratified before scoring**. Lumping
 all 9 greenwashing cases against all 6 reference cases would conflate two
 constructs and misread predictable, in-principle misses as failures of the
-primary claim. The full pre-registered stratification is reproduced in
-[Appendix A](#appendix-a--phase-6-pre-registration-ratified-blind).
+primary claim. The recorded stratification is reproduced in
+[Appendix A](#appendix-a--recorded-phase-6-expectations).
 
 ### Results, one-shot, against the frozen instrument
 
@@ -417,8 +423,8 @@ primary claim. The full pre-registered stratification is reproduced in
   regulator-grounded sourcing, not on the p-value.
 - **Boundary** — the 4 greenwashing cases held outside the primary comparison
   (3 out-of-scope specificity-based, 1 boundary promotional) all scored
-  **below the flag threshold of 50**, as predicted in advance. The blind spot is
-  bounded and predictable.
+  **below the flag threshold of 50**, matching the recorded expectations. The
+  failure mode is bounded within this diagnostic set.
 - At that threshold, sensitivity within the in-scope group is 3/5 (0.60) and
   specificity within the reference group is 5/6 (0.83).
 
@@ -436,7 +442,7 @@ rather than hypothesised:
   at ≈ 10 via S9: selective or corrupted numbers route to the low-risk cells
   because the paragraph *reads* concrete.
 
-Two further misses were pre-registered as upstream-signal caveats, and are what
+Two further misses were recorded as upstream-signal caveats, and are what
 sensitivity 3/5 is made of: **`GW-007`**, a two-sentence advertisement well
 below the models' typical training length, where the specificity model read the
 "$1 trillion" figure as substance (10.88, S9); and **`GW-002`**, generic ESG
@@ -455,19 +461,19 @@ scores were seen.
 **Artifacts:** `artifacts/contrast_run/{contrast_scored.csv, run_manifest.json,
 face_validity_stats.json}`, `artifacts/figures/face_validity.png`,
 `artifacts/provenance/contrast_run.{ttl,json}` (which records
-`prereg_ratified`).
+the protocol status and expectations date).
 
 ---
 
-## Appendix A — Phase-6 pre-registration, ratified blind
+## Appendix A — recorded Phase-6 expectations
 
-Ratified **2026-06-17**, from the curator notes and the locked design
-philosophy, with **no model run on the contrast set** and the instrument already
-frozen. The date is recorded independently in
-`artifacts/contrast_run/run_manifest.json` (`prereg_ratified`) and in the
-contrast-run PROV-O graph.
+Recorded **2026-06-17** from curator notes and the locked design philosophy.
+The instrument was already frozen and was not changed after the results. The
+expectations and first results appear in the same public commit, so the public
+repository does not supply an independent timestamp for their ordering. The
+manifest and PROV-O graph preserve this exact protocol status.
 
-| Case | Company | Mechanism | Stratum | Pre-registered expectation |
+| Case | Company | Mechanism | Stratum | Recorded expectation |
 | --- | --- | --- | --- | --- |
 | GW-001, GW-002, GW-003 | DWS | vague aspirational | **in_scope** | elevated |
 | GW-005 | Volkswagen | process-talk, no commitment | **in_scope** | moderate–elevated |
@@ -483,6 +489,36 @@ vs. reference separation, with the boundary probe reported separately;
 disagreements inside a stratum are logged as limitations, never as instrument
 edits; and the stratification is not revised after the scores are seen.
 
-Both pre-registered caveats — GW-007's length and RD-006's process framing —
-turned out to be exactly where the instrument failed. They are recorded here as
-predictions made before the fact, not as explanations found afterwards.
+Both recorded caveats — GW-007's length and RD-006's process framing — align
+with observed failures. Because the public timestamps are simultaneous, this is
+reported as protocol documentation rather than independent prospective proof.
+
+---
+
+## DL-006 — repository hardening and claim boundaries
+
+**Date:** 2026-09-04 · **Trigger:** end-to-end repository, packaging,
+provenance, and evidence-claim audit. Instrument unchanged — software and
+documentation only.
+
+The audit found four infrastructure gaps: the project was not buildable as a
+package, normal dependency installation pulled the full research/GPU stack,
+there was no automated CI, and provenance hashes reflected a CRLF working tree
+rather than Git-normalized artifact bytes. It also found two over-broad claims:
+the learned classifier stages were grouped under “nothing is a black box,” and
+the contrast protocol was described as independently blind even though its
+expectations and first results share one public commit.
+
+**Decision.** Move code to an installable `src/greenrisk` package; split base,
+model, research, and development dependencies; add validated CLI contracts,
+pytest, lint/build CI, manual model smoke tests, pinned dataset coordinates,
+complete future-run manifests, and hash/PROV-O integrity checks. Normalize text
+artifacts to LF. Describe the fuzzy layer as transparent while explicitly
+retaining learned-model uncertainty. Describe Phase 6 as a post-lock contrast
+evaluation whose expectations were not used for instrument tuning, without
+claiming independently timestamped preregistration.
+
+Historical manifests were expanded only from immutable Git and Hugging Face
+records. Unknown runtime details are marked unavailable. The numerical content
+of `MODEL_REGISTRY`, `SIGNAL_MAP`, the membership functions, and `RULES` remains
+the `rulebase-locked-v1` instrument; no ablation was performed.

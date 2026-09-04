@@ -43,10 +43,14 @@ def main() -> None:
     missing = [term for term in required_terms if term not in ttl_text]
     if missing:
         raise AssertionError(f"Missing provenance terms: {missing}")
-    if "GreenRiskPipeline_v0.1" not in json_text:
+    if "GreenRiskPipeline_v0.2.0" not in json_text:
         raise AssertionError("Missing pipeline agent in PROV-JSON output")
 
     print("Provenance smoke test passed.")
+
+
+def test_provenance_roundtrip() -> None:
+    main()
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ All four signal classifiers are pinned, unmodified checkpoints from the
 [ClimateBERT](https://huggingface.co/climatebert) family, hosted on the Hugging
 Face Hub under the `climatebert` organization and released under the Apache
 License 2.0. GreenRisk loads them at fixed revisions (see
-[`models.py`](../models.py)) and does not fine-tune or otherwise alter their
+[`metadata.py`](../src/greenrisk/metadata.py)) and does not fine-tune or otherwise alter their
 weights.
 
 **Base language model**

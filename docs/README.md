@@ -7,16 +7,15 @@
   climate-relevance gate, the four ClimateBERT signals, why the project uses
   fuzzy inference, the membership functions, and the 17-rule Mamdani base,
   worked through with examples.
-- [`validation.md`](validation.md) — the validity evidence, in two
-  independent layers: a 1,009-paragraph statistical comparison against a
-  published baseline, and a held-out, case-level test against real,
-  regulator-adjudicated companies. Includes the instrument's documented scope
-  limitation.
+- [`validation.md`](validation.md) — two exploratory evidence layers: a
+  1,009-paragraph construct comparison and a 15-case post-lock contrast
+  evaluation, with their chronology and independence limits.
 - [`decisions.md`](decisions.md) — the decision record: every instrument
   decision in the order it was taken, with the evidence behind it, the
-  alternatives that were rejected, the lock itself, and the blind
-  pre-registration of the held-out test. The `DL-00x` identifiers cited in the
-  paper resolve here.
+  alternatives that were rejected, the lock itself, and the corrected public
+  chronology of the contrast evaluation. The `DL-00x` identifiers resolve here.
+- [`responsible-use.md`](responsible-use.md) — intended uses, prohibited uses,
+  known limitations, and a review checklist.
 - [`ai-usage.md`](ai-usage.md) — how generative AI was and was not used in
   building this artifact, and what makes that division checkable.
 - [`acknowledgements.md`](acknowledgements.md) — citations for the ClimateBERT

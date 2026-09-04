@@ -1,26 +1,26 @@
-@prefix gr: <https://greenrisk.ppgi.ufrj.br/prov/> .
+@prefix gr: <https://github.com/idcesares/GreenRisk/prov/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-gr:score_5441f710bb76_distilroberta-base-climate-detector a prov:Entity,
+gr:score_5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114_distilroberta-base-climate-detector a prov:Entity,
         "gr:ClassificationScore"^^xsd:string ;
-    prov:wasDerivedFrom gr:paragraph_5441f710bb76 ;
-    prov:wasGeneratedBy gr:inference_5441f710bb76_distilroberta-base-climate-detector ;
+    prov:wasDerivedFrom gr:paragraph_5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114 ;
+    prov:wasGeneratedBy gr:inference_5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114_distilroberta-base-climate-detector ;
     gr:label "yes"^^xsd:string ;
     gr:model_used "climatebert/distilroberta-base-climate-detector"^^xsd:string ;
     gr:probability "0.99"^^xsd:string .
 
-gr:GreenRiskPipeline_v0.1 a prov:Agent,
+gr:GreenRiskPipeline_v0.2.0 a prov:Agent,
         "prov:SoftwareAgent"^^xsd:string ;
-    gr:version "0.1.0"^^xsd:string .
+    gr:version "0.2.0"^^xsd:string .
 
-gr:inference_5441f710bb76_distilroberta-base-climate-detector a prov:Activity,
+gr:inference_5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114_distilroberta-base-climate-detector a prov:Activity,
         "gr:ModelInference"^^xsd:string ;
-    prov:endedAtTime "2026-05-05T23:12:22.617380+00:00"^^xsd:dateTime ;
-    prov:startedAtTime "2026-05-05T23:12:22.617380+00:00"^^xsd:dateTime ;
-    prov:used gr:paragraph_5441f710bb76,
+    prov:endedAtTime "2026-09-04T17:40:51.729144+00:00"^^xsd:dateTime ;
+    prov:startedAtTime "2026-09-04T17:40:51.729144+00:00"^^xsd:dateTime ;
+    prov:used gr:paragraph_5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114,
         <https://huggingface.co/climatebert/distilroberta-base-climate-detector> ;
-    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.1 ;
+    prov:wasAssociatedWith gr:GreenRiskPipeline_v0.2.0 ;
     gr:max_length "512"^^xsd:string ;
     gr:model_commit "2c3bc660d45a59e31b35f5d3e365ee4f59fdf76c"^^xsd:string ;
     gr:model_repo "climatebert/distilroberta-base-climate-detector"^^xsd:string ;
@@ -31,9 +31,9 @@ gr:inference_5441f710bb76_distilroberta-base-climate-detector a prov:Activity,
     gr:commit_hash "2c3bc660d45a59e31b35f5d3e365ee4f59fdf76c"^^xsd:string ;
     gr:huggingface_repo "climatebert/distilroberta-base-climate-detector"^^xsd:string .
 
-gr:paragraph_5441f710bb76 a prov:Entity,
+gr:paragraph_5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114 a prov:Entity,
         "gr:InputParagraph"^^xsd:string ;
     gr:char_count "272"^^xsd:int ;
     gr:text_preview "We are committed to achieving net-zero greenhouse gas emissions across our entire value chain by 205..."^^xsd:string ;
-    gr:text_sha256 "5441f710bb76"^^xsd:string .
+    gr:text_sha256 "5441f710bb76a223fd7dc04bc884035c1310c6d45824062e4ce0c1d7cc55e114"^^xsd:string .
 

@@ -16,27 +16,29 @@ import argparse
 import hashlib
 import pathlib
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 # Repo root on the path so core modules import when run from anywhere.
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
 from datasets import load_dataset
-from prov.model import ProvDocument, Namespace
+from prov.model import Namespace, ProvDocument
 
-from models import all_signals_batch, score_batch, SIGNAL_MAP, MODEL_REGISTRY
-from rule_base import score_paragraph, library_firings, ANTS, RULES, _term_membership
+from greenrisk import __version__
+from greenrisk.metadata import TCFD_DATASET_ID, TCFD_DATASET_REVISION
+from greenrisk.models import MODEL_REGISTRY, SIGNAL_MAP, all_signals_batch, score_batch
+from greenrisk.rule_base import ANTS, RULES, _term_membership, library_firings, score_paragraph
 
 FIRING_TOL = 1e-9   # library vs. re-derived firing must agree to float precision
 MAP_TOL    = 1e-9   # in-flow sentiment signal vs. independent P(opportunity) read
 
 
-def sha12(text: str) -> str:
-    return hashlib.sha256(text.encode()).hexdigest()[:12]
+def text_sha256(text: str) -> str:
+    return hashlib.sha256(text.encode()).hexdigest()
 
 
 def main(n: int, gate: float):
-    ds = load_dataset("climatebert/tcfd_recommendations")["train"]
+    ds = load_dataset(TCFD_DATASET_ID, revision=TCFD_DATASET_REVISION)["train"]
     texts = ds["text"][:n]
 
     # --- SEAM A: type/key match (assert, don't assume) ---------------------
@@ -47,9 +49,11 @@ def main(n: int, gate: float):
 
     # --- Stage 1: climate gate (one batched detector pass) -----------------
     climate = [r["yes"] for r in score_batch("detector", texts)]
-    kept = [(i, t) for i, (t, c) in enumerate(zip(texts, climate)) if c >= gate]
+    kept = [
+        (i, t) for i, (t, c) in enumerate(zip(texts, climate, strict=True)) if c >= gate
+    ]
     keep_texts = [t for _, t in kept]
-    gate_hashes = [sha12(t) for t in keep_texts]
+    gate_hashes = [text_sha256(t) for t in keep_texts]
     print(f"gate>={gate}: kept {len(kept)}/{len(texts)} "
           f"({len(texts) - len(kept)} non-climate dropped)")
 
@@ -71,7 +75,7 @@ def main(n: int, gate: float):
         # SEAM B: identity preservation — the paragraph scored here is the same
         # one that entered the gate at this position. Caching / reordering is
         # exactly where identity quietly breaks.
-        assert sha12(text) == gate_hashes[j], f"identity broken at row {orig_i}"
+        assert text_sha256(text) == gate_hashes[j], f"identity broken at row {orig_i}"
 
         # SEAM C: the sentiment signal is the MAPPED value (P('opportunity')),
         # not a raw class. It must equal the sentiment model's opportunity
@@ -98,7 +102,7 @@ def main(n: int, gate: float):
     print(f"SEAMS OK on {len(records)} paragraphs:")
     print(f"  A key-match      : {sorted(ANTS)} == scorer keys")
     print(f"  B identity       : all {len(records)} hashes preserved")
-    print(f"  C sentiment map  : in-flow signal == P(opportunity), in [0,1]")
+    print("  C sentiment map  : in-flow signal == P(opportunity), in [0,1]")
     print(f"  defensibility    : max |library - rederived| firing = "
           f"{max_firing_disc:.2e}")
 
@@ -117,22 +121,25 @@ def emit_run_provenance(records, gate):
     """
     rec = records[0]                                  # exemplar = first kept paragraph
     text, sig, score_val = rec["text"], rec["sig"], rec["score"]
-    h = sha12(text)
+    h = text_sha256(text)
 
     doc = ProvDocument()
-    gr = Namespace("gr", "https://greenrisk.ppgi.ufrj.br/prov/")
+    gr = Namespace("gr", "https://github.com/idcesares/GreenRisk/prov/")
     hf = Namespace("hf", "https://huggingface.co/")
-    doc.set_default_namespace("https://greenrisk.ppgi.ufrj.br/prov/")
+    doc.set_default_namespace("https://github.com/idcesares/GreenRisk/prov/")
     doc.add_namespace(gr)
     doc.add_namespace(hf)
 
-    agent = doc.agent("gr:GreenRiskPipeline_v0.2",
-                      {"prov:type": "prov:SoftwareAgent", "gr:version": "0.2.0"})
-    now = datetime.now(timezone.utc)
+    agent = doc.agent(
+        f"gr:GreenRiskPipeline_v{__version__}",
+        {"prov:type": "prov:SoftwareAgent", "gr:version": __version__},
+    )
+    now = datetime.now(UTC)
     run = doc.activity("gr:seam_run_" + h, now, now,
                        {"prov:type": "gr:Phase4SeamRun",
                         "gr:n_paragraphs": str(len(records)),
-                        "gr:gate": str(gate), "gr:dataset": "climatebert/tcfd_recommendations"})
+                        "gr:gate": str(gate), "gr:dataset": TCFD_DATASET_ID,
+                        "gr:dataset_revision": TCFD_DATASET_REVISION})
     doc.wasAssociatedWith(run, agent)
 
     paragraph = doc.entity("gr:paragraph_" + h,
@@ -151,7 +158,7 @@ def emit_run_provenance(records, gate):
                              {"prov:type": "gr:ModelInference", "gr:reads_label": label})
         e_sig = doc.entity("gr:signal_%s_%s" % (h, var),
                            {"prov:type": "gr:Signal", "gr:variable": var,
-                            "gr:value": str(round(sig[var], 6))})
+                            "gr:value": str(sig[var])})
         doc.used(a_inf, paragraph)
         doc.used(a_inf, e_model)
         doc.wasGeneratedBy(e_sig, a_inf)

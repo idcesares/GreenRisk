@@ -20,9 +20,10 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 import skfuzzy as fuzz
 from datasets import load_dataset
 
-from models import all_signals_batch, score_batch
-from rule_base import score_paragraph, ANTS
-from linguistic_variables import risk
+from greenrisk.linguistic_variables import risk
+from greenrisk.metadata import TCFD_DATASET_ID, TCFD_DATASET_REVISION
+from greenrisk.models import all_signals_batch, score_batch
+from greenrisk.rule_base import ANTS, score_paragraph
 
 COMMIT_HI = 0.90   # commitment model firing strong
 SPEC_LO   = 0.40   # vague (specificity Low region)
@@ -39,11 +40,13 @@ def ascii_safe(s, n=300):
 
 
 def main(n, gate, show):
-    ds = load_dataset("climatebert/tcfd_recommendations")["train"]
+    ds = load_dataset(TCFD_DATASET_ID, revision=TCFD_DATASET_REVISION)["train"]
     texts = ds["text"][:n]
 
     climate = [r["yes"] for r in score_batch("detector", texts)]
-    kept = [(i, t) for i, (t, c) in enumerate(zip(texts, climate)) if c >= gate]
+    kept = [
+        (i, t) for i, (t, c) in enumerate(zip(texts, climate, strict=True)) if c >= gate
+    ]
     keep_texts = [t for _, t in kept]
     print(f"gate>={gate}: kept {len(kept)}/{len(texts)} climate paras")
 
@@ -53,7 +56,7 @@ def main(n, gate, show):
     commit_hi = 0
     flagged = []   # the #3 signature: high commitment AND vague
     band_counts = {b: 0 for b in BANDS}
-    for (orig_i, text), sig in zip(kept, signals):
+    for (orig_i, text), sig in zip(kept, signals, strict=True):
         if sig["commitment"] >= COMMIT_HI:
             commit_hi += 1
             if sig["specificity"] <= SPEC_LO:
@@ -66,7 +69,7 @@ def main(n, gate, show):
     n_kept = len(kept)
     print(f"\ncommitment >= {COMMIT_HI:.2f} (model fires strong) : {commit_hi}/{n_kept}")
     print(f"  AND specificity <= {SPEC_LO:.2f} (the #3 signature) : {len(flagged)}/{n_kept}")
-    print(f"  risk bands among the signature: "
+    print("  risk bands among the signature: "
           + ", ".join(f"{b}={band_counts[b]}" for b in BANDS))
 
     flagged.sort(key=lambda r: r[3], reverse=True)

@@ -1,136 +1,100 @@
-# Validation
+# Validation and evidence
 
-This document lays out the evidence for GreenRisk's validity, in two
-independent layers: a large-scale statistical comparison against a validated
-baseline, and a held-out, case-level face-validity test against real,
-regulator-adjudicated examples. It also states the instrument's scope limit
-plainly, with the specific cases that expose it.
+GreenRisk has two exploratory evidence layers, both produced with the numerical
+instrument frozen at `rulebase-locked-v1`. They characterize whether the
+instrument behaves consistently with its intended construct and expose its
+failure modes. Neither layer establishes organization-level, causal, legal, or
+population-wide validity.
 
-Both layers were run against the same **frozen instrument**
-(`rulebase-locked-v1`, see [Architecture §7](architecture.md#7-the-locked-instrument);
-the decisions that produced it are recorded in [`decisions.md`](decisions.md)).
-The held-out case set (Layer 2) was not inspected or scored until after the
-instrument was frozen, and its evaluation criteria were fixed in advance of
-scoring — the point of freezing the instrument first is that neither layer of
-evidence could have been produced by tuning the rules to fit the answer.
+## Evidence hierarchy
 
-## Layer 1 — large-scale comparison against a validated baseline
+| Layer | Data | What it supports | What it does not support |
+| --- | --- | --- | --- |
+| Corpus characterization | 1,009 climate-gated TCFD paragraphs | construct alignment and incremental differentiation | independent criterion validity or firm-level accuracy |
+| Post-lock contrast evaluation | 15 sourced paragraph cases | face validity and concrete boundary failures | a general benchmark or externally preregistered estimate |
+| Property tests | 4,158 fuzzy-grid evaluations plus trace checks | implementation consistency of locked rule behavior | empirical truth of the construct |
 
-**Setup.** 1,300 paragraphs from the `climatebert/tcfd_recommendations` corpus
-were passed through the climate-relevance gate; 1,009 passed and were scored
-by the full pipeline. Each paragraph's score was compared against an
-established external baseline: the "cheap talk" measure from Bingler et al.
-(`1 - P('spec')`, i.e. one minus the specificity model's own output), the
-metric introduced and validated in the paper the specificity classifier itself
-comes from (see [Acknowledgements](acknowledgements.md)).
+## Layer 1 — corpus characterization
 
-**Convergent validity.** GreenRisk's score correlates strongly with cheap
-talk: Spearman ρ = 0.60 (p ≈ 1.4×10⁻¹⁰⁰, n = 1,009). This establishes that
-GreenRisk is tracking the same underlying signal as an already-validated
-method, not measuring noise.
+The full train split of pinned dataset `climatebert/tcfd_recommendations`
+(revision `aee5c98f0bf7835bfb08308ffc7c17216657976b`) contains 1,300
+paragraphs. The climate gate retained 1,009 at `P(yes) ≥ 0.5`.
 
-**Discriminant validity.** Restricting to the most vague quartile of text by
-the cheap-talk measure (n = 253, cheap-talk mean 0.96, standard deviation
-0.01 — a group the baseline treats as essentially uniform), GreenRisk's score
-still spans 35–90 (mean 38.6, sd 13.1), correlated with the commitment signal
-at Spearman ρ = 0.43. Where the baseline sees a single undifferentiated mass
-of vague text, GreenRisk separates "vague and quiet" (a weak disclosure) from
-"vague and loud" (a confident, unsubstantiated pledge). This is the concrete,
-measured value the four-signal design adds over the single-signal baseline.
+GreenRisk was compared with the Bingler et al. cheap-talk measure,
+`1 - P(spec)`. Spearman correlation was ρ = 0.602 (p ≈ 1.4×10⁻¹⁰⁰,
+n = 1,009). Within the baseline's vaguest quartile (n = 253; cheap-talk mean
+0.961, sd 0.010), GreenRisk ranged from 35 to 90 and correlated with commitment
+at ρ = 0.433. This is consistent with the intended distinction between quiet
+vagueness and confident, unsupported pledges.
 
-**The convergence curve is not monotone, and that is by design.** Mean risk
-climbs with cheap talk through the middle deciles but bends down in the most
-vague decile (cheap-talk ≈ 0.94–0.97 → mean risk drops to the high 30s/low
-40s, versus roughly 50 at cheap-talk ≈ 0.82–0.90). This is exactly the
-Tier-1 spine's S1 rule surfacing at scale: maximally vague text that makes no
-claim is deliberately scored lower than moderately vague text that does. The
-divergence from a naively monotone baseline is a designed property of the
-rule base, not an artifact.
+This comparison is not an independent validation target: the baseline uses the
+same specificity classifier that supplies one GreenRisk input. The findings
+are best interpreted as convergent construct alignment plus evidence that the
+additional commitment/rule structure differentiates passages the baseline
+treats similarly. TCFD category cuts are descriptive only because the dataset
+has no firm or document identifiers and no greenwashing labels.
 
-**Descriptive cut by disclosure category.** Scored by TCFD category, metrics
-sections are concrete (mean cheap-talk 0.20, mean risk 21.0) while strategy,
-risk, and governance sections are markedly more vague (cheap-talk 0.65–0.87,
-risk 37–44) — a pattern consistent with prior "cherry-picking" findings in the
-climate-disclosure literature, reproduced here on GreenRisk's own score.
+The non-monotone bend in the highest cheap-talk deciles is expected. Rule S1
+assigns vague text with no claim to Moderate risk; louder vague claims reach
+higher terms. This is a frozen design property, not an empirical correction.
 
-## Layer 2 — held-out face validity against real, adjudicated cases
+## Layer 2 — post-lock contrast evaluation
 
-**The case set.** `data/contrast_set.csv` contains 15 paragraph-level cases
-built entirely from public sources, each with its own citation:
+`data/contrast_set.csv` contains 15 sourced excerpts: nine passages associated
+with public greenwashing enforcement/rulings involving DWS, Volkswagen, and
+HSBC, and six reference passages from Microsoft and Ørsted disclosures. It is
+a hand-curated diagnostic set, not a representative sample.
 
-- 9 greenwashing cases, drawn from enforcement actions and rulings against
-  **DWS Group** (SEC settlement; German Frankfurt Public Prosecutor's Office
-  fine), **Volkswagen AG** (U.S. EPA/DOJ "Dieselgate" action), and **HSBC UK
-  Bank plc** (UK Advertising Standards Authority ruling);
-- 6 reference cases of rigorous disclosure, from **Microsoft** (CDP A-list,
-  SBTi-validated) and **Ørsted A/S** (CDP A-list, SBTi-validated).
+The numerical instrument had been frozen before this evaluation and the case
+expectations were not used to tune it. However, the expectations and first
+results were introduced together in public Git commit `8b2f461`. The repository
+therefore cannot independently demonstrate an externally timestamped blind
+preregistration. The table in
+[`decisions.md`](decisions.md#appendix-a--recorded-phase-6-expectations) is
+retained as the recorded protocol, with this chronology limitation explicit.
 
-**Two mechanisms, one in scope.** Inspecting the case set before scoring
-surfaced an important structural fact: the greenwashing cases split into two
-distinct mechanisms. **Vagueness-based greenwashing** ("cheap talk" —
-aspirational language with no specifics) is exactly what the four-signal
-design targets. **Specificity-based greenwashing** — concrete, detailed
-figures that are nonetheless selective, corrupted, or misleading in what they
-omit — works through a mechanism the instrument's signals cannot see, since
-`specificity` reads a paragraph's surface form, not the truthfulness of its
-numbers. The case set was stratified into **in-scope** (vagueness-based),
-**boundary** (a promotional/awards case, probing the opportunity-framing
-tier), and **out-of-scope** (specificity-based) groups before any scoring took
-place, so that out-of-scope misses are read as a documented scope limit rather
-than as a failure of the primary claim. The full stratification, with the
-per-case expectation registered for each of the 15 cases, is published in
-[Appendix A of the decision record](decisions.md#appendix-a--phase-6-pre-registration-ratified-blind);
-its ratification date is independently recorded in
-`artifacts/contrast_run/run_manifest.json` and in the contrast-run PROV-O graph.
+For the primary in-scope comparison—five vagueness-based cases versus six
+reference passages—the observed AUC was 0.867 (Mann–Whitney U = 26, one-sided
+p = 0.026). At threshold 50, sensitivity was 3/5 and specificity 5/6. Because
+the sample is tiny, selected, and paragraph-level, these values are descriptive
+effect estimates rather than general performance guarantees.
 
-**Primary result.** In-scope greenwashing separates cleanly from the rigorous
-reference group: AUC = 0.87 (n = 5 vs. 6; Mann-Whitney U = 26, one-sided
-p = 0.026). The sample is small by design — held-out, hand-curated,
-regulator-grounded case sets do not scale the way a corpus run does — so this
-is reported as a demonstration with a large effect size, not as a
-statistically definitive result on its own; it is the second, independent
-layer of evidence alongside Layer 1's corpus-scale statistics, not a
-replacement for it. At the flag threshold of 50, sensitivity within the
-in-scope group is 3/5 (0.60) and specificity within the reference group is
-5/6 (0.83); the individual misses are itemized in the scope-limitation
-section below.
+All four cases outside the primary scope scored below 50: three detailed but
+misleading/omissive passages and one promotional boundary case. This is useful
+negative evidence. It shows that linguistic specificity can route a passage to
+low risk even when external facts make it misleading.
 
-**Boundary result.** All 4 greenwashing cases held outside the primary
-comparison scored below the flag threshold of 50, exactly as predicted in
-advance: the 3 out-of-scope, specificity-based cases (`GW-004`, `GW-008`,
-`GW-009`) and the 1 boundary promotional case (`GW-006`). This confirms that
-the instrument's blind spot is precise and predictable rather than arbitrary.
+## Documented failure modes
 
-## Scope limitation: specificity is a proxy, and proxies can be fooled
+- `RD-006` scored 72.7: process-oriented reporting language had strong
+  commitment but few paragraph-level specifics, producing a false positive.
+- `GW-004` and `GW-008` scored near 10: concrete numbers appeared specific even
+  though the broader adjudicated context involved corrupted measurement or
+  omission.
+- `GW-007` scored 10.88: a short advertisement with a dollar figure was read as
+  specific.
+- `GW-002` scored 35.0: the upstream commitment classifier returned 0.006 on
+  generic ESG prose.
 
-`specificity` measures whether a paragraph *reads* as concrete — numbers,
-dates, named mechanisms — not whether those numbers are honest or complete.
-That proxy can fail in both directions, and both failure modes are visible in
-the held-out cases rather than hypothetical:
+The defensible scope is therefore narrow: GreenRisk screens for patterns of
+vagueness, claim strength, opportunity framing, and net-zero language. It does
+not establish truth, detect material omission, or verify whether numbers and
+actions match. See [`responsible-use.md`](responsible-use.md).
 
-- **Low specificity does not always mean low substance.** Case `RD-006`
-  (Ørsted, describing its preparation for EU CSRD/ESRS reporting) scored 72.7
-  — Elevated — because it uses confident commitment language while describing
-  a *process* rather than citing figures. It is a false positive against a
-  rigorous discloser, produced by the same signature (vague-but-committed)
-  that correctly flags genuine greenwashing elsewhere.
-- **High specificity does not always mean good faith.** Cases `GW-004` and
-  `GW-008` — Volkswagen's tailpipe-emissions figures published during the
-  period its defeat-device software was active, and HSBC's tree-planting
-  commitment set against financed fossil-fuel emissions roughly fifty times
-  larger — both scored Low. The paragraphs are specific; what they omit is
-  not visible to a paragraph-level text classifier.
+## Reproducibility
 
-Two further upstream-signal cases are documented for completeness: `GW-007`
-(a short advertising sentence, below the typical training-length paragraph,
-where the specificity model misread a dollar figure) and `GW-002` (generic
-ESG prose where the commitment classifier read near-zero commitment despite
-the surrounding case being part of a documented misrepresentation).
+Committed outputs are bound by SHA-256 in versioned manifests and PROV-O:
 
-**The resulting, precisely bounded claim:** GreenRisk detects
-vagueness-based ("cheap talk") greenwashing, with measured effect sizes at
-both corpus scale and case-study scale. It is not designed to detect, and
-does not reliably detect, omission- or fraud-based greenwashing where the
-disclosed numbers themselves are the problem. Catching that second mechanism
-would require verifying claims against external data, not just reading the
-paragraph — a different problem from the one this instrument solves.
+- `artifacts/corpus_run/` and `artifacts/provenance/corpus_run.*`
+- `artifacts/contrast_run/` and `artifacts/provenance/contrast_run.*`
+
+Run `uv run python scripts/verify_artifact_integrity.py` to verify these links.
+The historical manifests identify exact pipeline/instrument commits, model and
+dataset revisions, lockfile hash, and result hashes. Runtime details not
+captured by the original scripts are explicitly marked unavailable. New runs
+record Python, PyTorch, Transformers, device, lockfile, input, and output
+coordinates automatically.
+
+The locked fuzzy behavior is asserted by pytest: rule integrity, rule-term
+ordering, bounded centroid artifacts, bounded amplifier exceptions, and
+agreement between independently re-derived and scikit-fuzzy firing strengths.

@@ -17,7 +17,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 
-from rule_base import score_paragraph, format_trace
+from greenrisk.rule_base import format_trace, score_paragraph
 
 # Pre-registered profile + expectation.
 # sentiment is Low and inert here (the net-zero/spine rules cap the score); set

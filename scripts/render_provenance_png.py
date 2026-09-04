@@ -20,10 +20,10 @@ import networkx as nx
 from matplotlib.lines import Line2D
 from prov.model import ProvDocument
 from rdflib import Graph, Literal, URIRef
-from rdflib.namespace import RDF, PROV
+from rdflib.namespace import PROV, RDF
 
-
-GR = "https://greenrisk.ppgi.ufrj.br/prov/"
+GR = "https://github.com/idcesares/GreenRisk/prov/"
+LEGACY_GR = "https://greenrisk.ppgi.ufrj.br/prov/"
 HF = "https://huggingface.co/"
 
 RELATIONS = {
@@ -51,9 +51,10 @@ def parse_provenance(path: Path) -> Graph:
 
 
 def _literal_value(graph: Graph, node: URIRef, predicate_suffix: str) -> str | None:
-    predicate = URIRef(GR + predicate_suffix)
-    for value in graph.objects(node, predicate):
-        return str(value)
+    for namespace in (GR, LEGACY_GR):
+        predicate = URIRef(namespace + predicate_suffix)
+        for value in graph.objects(node, predicate):
+            return str(value)
     return None
 
 
@@ -76,6 +77,8 @@ def _short_id(node: URIRef) -> str:
     text = str(node)
     if text.startswith(GR):
         return text.removeprefix(GR)
+    if text.startswith(LEGACY_GR):
+        return text.removeprefix(LEGACY_GR)
     if text.startswith(HF):
         return text.removeprefix(HF).split("/")[-1]
     return text.rsplit("/", 1)[-1].rsplit("#", 1)[-1]

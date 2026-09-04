@@ -36,9 +36,8 @@ judgments:
   constructs;
 - the signal mappings, the membership functions, and the 17-rule Mamdani base,
   including the DL-001 correction that reshaped the spine;
-- the evaluation protocol — the decision to freeze the instrument, the blind
-  pre-registration of the held-out contrast set, and the one-shot scoring
-  discipline;
+- the evaluation protocol — the decision to freeze the instrument, record
+  expectations for the contrast set, and avoid post-lock tuning;
 - the interpretation of the evidence, the scope limitation the results expose,
   and the conclusions drawn from them.
 
@@ -55,11 +54,10 @@ rather than a claim about intent:
 - every instrument decision was logged **before** it was relied on, and the
   alternatives that were rejected are logged with it;
 - the instrument was frozen at `rulebase-locked-v1` (commit `a40288a`) before
-  the held-out case set was inspected, so no post-hoc adjustment — by a human or
-  a model — could have fitted it to the test;
-- the held-out set was scored **once**, against the pre-registered
-  stratification published in
-  [Appendix A of the decision record](decisions.md#appendix-a--phase-6-pre-registration-ratified-blind);
+  the contrast evaluation and was not adjusted afterward;
+- the expectations and results are preserved, while the public record also
+  makes clear that they entered Git history in the same commit and therefore
+  are not independently verifiable as a blind preregistration;
 - the five ClimateBERT classifiers are pinned by revision, and every run emits a
   W3C PROV-O graph binding its results to those revisions and to the instrument
   tag;
