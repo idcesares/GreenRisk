@@ -2388,16 +2388,11 @@ wheels = [
 
 [[package]]
 name = "prov"
-version = "2.1.1"
+version = "3.1.0"
 source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "networkx" },
-    { name = "pydot" },
-    { name = "python-dateutil" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c6/bb/442f2e478061543c9c229f48c2d3a43cb0a77642584edecac126bc1ade99/prov-2.1.1.tar.gz", hash = "sha256:7d012b164f5bbb42e118ed9d25788ab012d09082b722bc9dd4e811a309ea57f5", size = 136802, upload-time = "2025-06-24T22:01:50.767Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b5/64/2357152813c37d0b02d605f96de4c072c9016b46b3c57908f89e25d95bf9/prov-3.1.0.tar.gz", hash = "sha256:e3ecbf6345e46b1958b286bd1b090c5baffa942015ecf04b44a8cc63830f8a92", size = 274265, upload-time = "2026-08-07T19:31:50.809Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/76/17/5703ad2380e57ecceb2700e30646ba0d856d9b90c9f33b01c68a3e298e3a/prov-2.1.1-py3-none-any.whl", hash = "sha256:04f74f9151b68f0bda68c943e111b1275207b19e197689043644a1b355a9d035", size = 425860, upload-time = "2025-06-24T22:01:49.485Z" },
+    { url = "https://files.pythonhosted.org/packages/99/a2/0d328e04d5c6279efbaeedb9998d6dd6ad47552c6f889fa1098ed7d071b6/prov-3.1.0-py3-none-any.whl", hash = "sha256:c70f2785e353bc3366f4711d7a5488380249026498fcf6274c71f783f2773545", size = 673103, upload-time = "2026-08-07T19:31:49.201Z" },
 ]
 
 [[package]]
