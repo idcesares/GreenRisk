@@ -866,6 +866,7 @@ name = "greenrisk"
 version = "0.2.0"
 source = { editable = "." }
 dependencies = [
+    { name = "lxml" },
     { name = "networkx" },
     { name = "numpy" },
     { name = "prov" },
@@ -884,7 +885,6 @@ research = [
     { name = "datasets" },
     { name = "graphviz" },
     { name = "jupyterlab" },
-    { name = "lxml" },
     { name = "matplotlib" },
     { name = "networkx" },
     { name = "pandas" },
@@ -909,7 +909,7 @@ requires-dist = [
     { name = "graphviz", marker = "extra == 'research'", specifier = ">=0.21" },
     { name = "huggingface-hub", marker = "extra == 'models'", specifier = ">=1.13.0" },
     { name = "jupyterlab", marker = "extra == 'research'", specifier = ">=4.5.7" },
-    { name = "lxml", marker = "extra == 'research'", specifier = ">=5.0.0" },
+    { name = "lxml", specifier = ">=5.0.0" },
     { name = "matplotlib", marker = "extra == 'research'", specifier = ">=3.11.0" },
     { name = "networkx", specifier = ">=3.6.1" },
     { name = "networkx", marker = "extra == 'research'", specifier = ">=3.6.1" },
